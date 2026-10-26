@@ -182,7 +182,58 @@
       "cs.coming.cn": "即将上架",
       "cs.back": "Back to the garden",
       "cs.note": "This study is resting until the first drop. No price, no cart—only light and cloth.",
-      "cs.meta": "NoY — Coming soon"
+      "cs.meta": "NoY — Coming soon",
+      "nav.studio": "Garden Studio",
+      "nav.studio.short": "Studio",
+      "studio.label": "Garden Studio",
+      "studio.title": "Doodle and mix. Leave it with NoY.",
+      "studio.lead": "A quiet sheet of garden paper. Draw freely, then set down a tee, a knit, or a sprig. Play — a mood to share with NoY, never a way to order.",
+      "studio.cta": "Open the studio",
+      "studio.aside": "A line, a silhouette, a colour you keep noticing.",
+      "studio.not": "Not an order · no checkout",
+      "gs.meta": "NoY — Garden Studio",
+      "gs.desc": "Doodle and place soft silhouettes in NoY’s garden studio. A page for inspiration, not for orders.",
+      "gs.kicker": "Garden Studio",
+      "gs.title": "Doodle and mix. Leave the inspiration with NoY.",
+      "gs.lead": "A sheet of garden paper. Draw freely, or lightly mix a few silhouettes — tee, knit, sprig. Colour and placement, for play. This is not an order.",
+      "gs.note": "For fun, and to share a mood with NoY. Not a product order, a size hold, or checkout. Download a PNG if you’d like to send it along.",
+      "gs.mail": "Email this inspiration",
+      "gs.mailhint": "Your mail app opens a draft. Attach the PNG you downloaded — this page cannot upload a file.",
+      "gs.mail.subject": "NoY garden inspiration",
+      "gs.mail.body": "Hello NoY,\n\nI made a garden doodle to share as inspiration — not an order. The PNG is attached (downloaded from the garden studio).\n\n",
+      "gs.back": "Back to the garden",
+      "gs.tools": "Studio tools",
+      "gs.draw": "Draw",
+      "gs.eraser": "Eraser",
+      "gs.size": "Size",
+      "gs.colors": "Colours",
+      "gs.color.ink": "Ink",
+      "gs.color.garden": "Garden",
+      "gs.color.sage": "Sage",
+      "gs.color.lilac": "Lilac",
+      "gs.color.blush": "Blush",
+      "gs.color.dusk": "Dusk",
+      "gs.stamps": "Stamps",
+      "gs.stamp.tee": "Soft tee",
+      "gs.stamp.knit": "Light knit",
+      "gs.stamp.sprig": "Lilac sprig",
+      "gs.stamp.leaf": "Leaf",
+      "gs.stamp.petal": "Petal",
+      "gs.stamp.lily": "Water lily",
+      "gs.smaller": "Smaller",
+      "gs.larger": "Larger",
+      "gs.remove": "Remove stamp",
+      "gs.undo": "Undo",
+      "gs.clear": "Clear",
+      "gs.download": "Download PNG",
+      "gs.canvas": "Garden paper. Draw with a pointer, or drag a stamp.",
+      "gs.keys": "Undo with Ctrl or ⌘ Z. Select a stamp, then use arrow keys to move, + and − to resize, and Delete to remove it.",
+      "gs.edit": "Selected stamp",
+      "gs.did.undo": "Undone.",
+      "gs.did.clear": "Paper cleared.",
+      "gs.did.download": "PNG downloaded.",
+      "gs.did.place": "Stamp placed.",
+      "gs.did.remove": "Stamp removed."
     },
     zh: {
       "meta.title": "NoY — 安静花园里的柔软衣物",
@@ -362,7 +413,58 @@
       "cs.coming.cn": "即将上架",
       "cs.back": "回到花园",
       "cs.note": "这幅习作在首发前安静歇着。没有价格，没有购物车——只有光与布。",
-      "cs.meta": "NoY — 即将上架"
+      "cs.meta": "NoY — 即将上架",
+      "nav.studio": "花园灵感",
+      "nav.studio.short": "灵感",
+      "studio.label": "花园灵感",
+      "studio.title": "涂鸦与搭配，把灵感留给 NoY",
+      "studio.lead": "一张安静的花园纸。自由涂鸦，再放上短袖、针织或一枝花。这是玩，也是把一种心情留给 NoY——从不是下单。",
+      "studio.cta": "打开花园灵感",
+      "studio.aside": "一条线，一个轮廓，一种你总在留意的颜色。",
+      "studio.not": "不是订单 · 没有结账",
+      "gs.meta": "NoY — 花园灵感",
+      "gs.desc": "在 NoY 花园灵感页涂鸦、搭配柔软的轮廓。这一页为了灵感，不是为了下单。",
+      "gs.kicker": "花园灵感",
+      "gs.title": "涂鸦与搭配，把灵感留给 NoY",
+      "gs.lead": "一张花园纸：可以自由涂鸦，也可以轻轻搭配几枚轮廓——短袖、针织、花枝。玩玩颜色与位置。这里不是下单。",
+      "gs.note": "为了好玩，也把一种心情分享给 NoY。不是商品订单、尺码预留或结账。若想寄来，请先下载 PNG。",
+      "gs.mail": "把这份灵感寄出",
+      "gs.mailhint": "将打开邮件草稿。请在邮件应用里附上刚下载的 PNG——此页无法上传文件。",
+      "gs.mail.subject": "NoY 花园灵感",
+      "gs.mail.body": "你好 NoY，\n\n我想分享一幅花园涂鸦作为灵感——不是订单。PNG 在附件里（我已从花园灵感页下载）。\n\n",
+      "gs.back": "回到花园",
+      "gs.tools": "工作室工具",
+      "gs.draw": "涂鸦",
+      "gs.eraser": "橡皮",
+      "gs.size": "粗细",
+      "gs.colors": "颜色",
+      "gs.color.ink": "墨色",
+      "gs.color.garden": "园绿",
+      "gs.color.sage": "鼠尾草",
+      "gs.color.lilac": "丁香",
+      "gs.color.blush": "浅粉",
+      "gs.color.dusk": "暮色",
+      "gs.stamps": "贴纸",
+      "gs.stamp.tee": "柔软短袖",
+      "gs.stamp.knit": "轻薄针织",
+      "gs.stamp.sprig": "丁香枝",
+      "gs.stamp.leaf": "叶子",
+      "gs.stamp.petal": "花瓣",
+      "gs.stamp.lily": "睡莲",
+      "gs.smaller": "缩小",
+      "gs.larger": "放大",
+      "gs.remove": "移除贴纸",
+      "gs.undo": "撤销",
+      "gs.clear": "清空",
+      "gs.download": "下载 PNG",
+      "gs.canvas": "花园纸。可用指针涂鸦，也可拖动贴纸。",
+      "gs.keys": "撤销：Ctrl 或 ⌘ Z。选中贴纸后，方向键移动，+ 与 − 缩放，Delete 移除。",
+      "gs.edit": "当前贴纸",
+      "gs.did.undo": "已撤销。",
+      "gs.did.clear": "纸面已清空。",
+      "gs.did.download": "已下载 PNG。",
+      "gs.did.place": "已放上贴纸。",
+      "gs.did.remove": "已移除贴纸。"
     }
   };
 
@@ -399,6 +501,7 @@
   function apply(lang) {
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
     document.querySelectorAll("[data-i18n]").forEach((el) => {
+      if (el.tagName === "META") return;
       const key = el.getAttribute("data-i18n");
       const val = t(lang, key);
       if (el.hasAttribute("data-i18n-html") || /<[a-z][\s\S]*>/i.test(val)) el.innerHTML = val;
@@ -418,10 +521,14 @@
     document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
       el.setAttribute("alt", t(lang, el.getAttribute("data-i18n-alt")));
     });
-    const title = t(lang, "meta.title");
+    const titleKey = document.documentElement.getAttribute("data-i18n-title") || "meta.title";
+    const title = t(lang, titleKey);
     if (title) document.title = title;
     const desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.setAttribute("content", t(lang, "meta.desc"));
+    if (desc) {
+      const descKey = desc.getAttribute("data-i18n") || "meta.desc";
+      desc.setAttribute("content", t(lang, descKey));
+    }
     document.querySelectorAll(".lang-switch [data-lang]").forEach((btn) => {
       const on = btn.getAttribute("data-lang") === lang;
       btn.setAttribute("aria-pressed", on ? "true" : "false");

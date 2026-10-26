@@ -653,6 +653,53 @@
     }
     .tile { transition: transform .45s ease; }
     a.tile-link:hover .tile, a.tile-link:focus-visible .tile { transform: translateY(-2px); }
+
+    .nav-left a.nav-studio, .mobile-nav a.nav-studio { color: var(--accent); }
+    .nav-left a.nav-studio:hover { color: var(--garden); }
+    .nav-studio .nav-short { display: none; }
+    @media (min-width: 981px) and (max-width: 1220px) {
+      .nav-left, .nav-right { gap: 14px; letter-spacing: 0.14em; }
+      .nav-studio .nav-long { display: none; }
+      .nav-studio .nav-short { display: inline; }
+    }
+
+    .studio-invite {
+      position: relative; z-index: 1;
+      max-width: 1480px; margin: 0 auto;
+      padding: 8px 40px 56px;
+    }
+    .studio-card {
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; align-items: center;
+      padding: 42px 48px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(233,223,239,0.7), transparent 42%),
+        radial-gradient(circle at 92% 84%, rgba(159,175,144,0.26), transparent 40%),
+        linear-gradient(180deg, rgba(255,250,244,0.94), rgba(247,239,227,0.9));
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      box-shadow: 0 18px 50px rgba(77,94,74,0.08);
+    }
+    .studio-card h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 400; font-size: clamp(32px, 4vw, 48px);
+      letter-spacing: -0.02em; line-height: 1.05; margin: 6px 0 16px;
+    }
+    .studio-card p { color: var(--muted); font-size: 14px; line-height: 1.8; max-width: 46ch; }
+    .studio-actions { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin-top: 26px; }
+    .studio-not { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+    .studio-doodle {
+      border: 1px solid var(--line); background: #f6efe6; border-radius: 3px; overflow: hidden;
+    }
+    .studio-doodle svg { width: 100%; height: auto; display: block; }
+    .studio-doodle figcaption {
+      padding: 12px 16px 16px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic; font-size: 18px; color: var(--garden);
+    }
+    @media (max-width: 980px) {
+      .studio-invite { padding: 8px 20px 40px; }
+      .studio-card { grid-template-columns: 1fr; padding: 28px 22px 26px; gap: 22px; }
+    }
 </style>
 <script src="assets/i18n.js"></script></head>
 <body>
@@ -665,6 +712,7 @@
 <div class="topbar-inner">
 <nav aria-label="Primary" class="nav-left" data-i18n-aria="nav.primary">
 <a data-i18n="nav.atelier" href="#atelier">Atelier</a>
+<a class="nav-studio" href="garden-studio.html"><span class="nav-long" data-i18n="nav.studio">Garden Studio</span><span class="nav-short" data-i18n="nav.studio.short">Studio</span></a>
 <a data-i18n="nav.collection" href="#collection">Collection</a>
 <a data-i18n="nav.shop" href="#shop">Shop</a>
 </nav>
@@ -678,6 +726,7 @@
 </div>
 <nav aria-label="Mobile" class="mobile-nav" data-i18n-aria="nav.mobile" id="mobile-nav">
 <a data-i18n="nav.atelier" href="#atelier">Atelier</a>
+<a class="nav-studio" data-i18n="nav.studio" href="garden-studio.html">Garden Studio</a>
 <a data-i18n="nav.collection" href="#collection">Collection</a>
 <a data-i18n="nav.shop" href="#shop">Shop</a>
 <a data-i18n="nav.about" href="#about">About</a>
@@ -714,6 +763,7 @@
 <div class="hero-actions">
 <a class="btn primary" data-i18n="hero.cta" href="#atelier">Step into the atelier</a>
 <a class="text-link" data-i18n="hero.link" href="#collection">The first edit</a>
+<a class="text-link" data-i18n="nav.studio" href="garden-studio.html">Garden Studio</a>
 </div>
 </div>
 </section>
@@ -747,6 +797,37 @@
 <a aria-label="Lavender path" class="tile-link" data-i18n-aria="tile.breeze" href="coming-soon.html?piece=breeze"><figure class="tile t8"><img alt="Path through a lavender field" data-i18n-alt="alt.breeze" height="720" loading="lazy" src="assets/brush-breeze.jpg" width="1280"/><figcaption data-i18n="tile.breeze">Lavender path</figcaption></figure></a>
 </div>
 </div>
+<section aria-labelledby="studio-title" class="studio-invite reveal" id="garden">
+<div class="studio-card">
+<div>
+<p class="section-label" data-i18n="studio.label">Garden Studio</p>
+<h2 data-i18n="studio.title" id="studio-title">Doodle and mix. Leave it with NoY.</h2>
+<p data-i18n="studio.lead">A quiet sheet of garden paper. Draw freely, then set down a tee, a knit, or a sprig. Play — a mood to share with NoY, never a way to order.</p>
+<div class="studio-actions">
+<a class="btn primary" data-i18n="studio.cta" href="garden-studio.html">Open the studio</a>
+<span class="studio-not" data-i18n="studio.not">Not an order · no checkout</span>
+</div>
+</div>
+<figure class="studio-doodle">
+<svg aria-hidden="true" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg">
+<rect width="360" height="220" fill="#f6efe6"/>
+<ellipse cx="62" cy="46" rx="86" ry="52" fill="#e9dfef" opacity=".75"/>
+<ellipse cx="304" cy="176" rx="100" ry="64" fill="#9faf90" opacity=".28"/>
+<ellipse cx="248" cy="34" rx="74" ry="40" fill="#f2ddd9" opacity=".85"/>
+<path d="M34 146C76 108 90 178 128 142s50-44 82 2" fill="none" stroke="#9a7fa6" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M44 76c18-28 46-22 60 6" fill="none" stroke="#4d5e4a" stroke-width="1.5" stroke-linecap="round"/>
+<circle cx="94" cy="56" r="7" fill="#c4b0d0"/>
+<circle cx="110" cy="68" r="5" fill="#e4bbb6"/>
+<circle cx="82" cy="70" r="4.5" fill="#9a7fa6"/>
+<path d="M206 84c-6-16 8-28 22-22 4-12 20-14 26-2 12-4 24 6 22 16 8 4 10 16 2 20l-6 42c-2 8-26 14-38 6l-8-42c-6-2-12-10-20-18z" fill="#6f8264"/>
+<ellipse cx="240" cy="82" rx="8" ry="5" fill="#f6efe6"/>
+<path d="M286 160c10-22 8-48-6-70" fill="none" stroke="#5f734f" stroke-width="1.6" stroke-linecap="round"/>
+<ellipse cx="286" cy="84" rx="7" ry="13" transform="rotate(18 286 84)" fill="#7d9470"/>
+</svg>
+<figcaption data-i18n="studio.aside">A line, a silhouette, a colour you keep noticing.</figcaption>
+</figure>
+</div>
+</section>
 <section aria-labelledby="shop-title" class="section tight reveal" id="shop">
 <div class="section-head">
 <div>
@@ -964,6 +1045,7 @@
 <h4 data-i18n="foot.explore">Explore</h4>
 <ul>
 <li><a data-i18n="nav.atelier" href="#atelier">Atelier</a></li>
+<li><a data-i18n="nav.studio" href="garden-studio.html">Garden Studio</a></li>
 <li><a data-i18n="nav.collection" href="#collection">Collection</a></li>
 <li><a data-i18n="nav.shop" href="#shop">Shop</a></li>
 <li><a data-i18n="nav.about" href="#about">About</a></li>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-title="gs.meta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NoY — Garden Studio</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <meta name="description" content="Doodle and place soft silhouettes in NoY’s garden studio. A page for inspiration, not for orders." data-i18n="gs.desc" />
+  <meta name="theme-color" content="#f4eee6" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4eee6;
+      --paper: #fffaf4;
+      --lilac: #c4b0d0;
+      --lilac-mist: #e9dfef;
+      --sage: #9faf90;
+      --ink: #2c322c;
+      --ink-soft: #3f463f;
+      --muted: #7a8176;
+      --line: rgba(44,50,44,0.1);
+      --line-strong: rgba(44,50,44,0.16);
+      --accent: #9a7fa6;
+      --garden: #4d5e4a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; color: inherit; }
+    button { background: none; border: 0; cursor: pointer; }
+    button:disabled { opacity: 0.38; cursor: default; }
+    :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 3px; }
+    .skip {
+      position: absolute; left: -9999px; top: 8px; z-index: 20;
+      background: var(--garden); color: var(--paper); padding: 10px 16px; font-size: 12px;
+    }
+    .skip:focus { left: 8px; }
+    .wash {
+      position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(circle at 12% 16%, rgba(233,223,239,0.65), transparent 42%),
+        radial-gradient(circle at 88% 76%, rgba(159,175,144,0.28), transparent 40%),
+        radial-gradient(circle at 70% 10%, rgba(242,221,217,0.45), transparent 36%);
+    }
+    .top {
+      max-width: 1180px; margin: 0 auto; padding: 22px 28px 8px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 22px; letter-spacing: 0.42em; margin-right: -0.42em; font-weight: 500;
+    }
+    .top-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
+    .back {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      border-bottom: 1px solid var(--line-strong); padding-bottom: 3px;
+    }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    .lang-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
+    .lang-switch button { opacity: 0.45; padding: 4px 2px; }
+    .lang-switch button.is-active { opacity: 1; border-bottom: 1px solid var(--garden); }
+    .lang-switch .sep { opacity: 0.35; }
+    .layout {
+      max-width: 1180px; margin: 0 auto; padding: 18px 28px 72px;
+      display: grid;
+      grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      column-gap: 36px;
+      align-items: start;
+    }
+    .copy-intro { grid-column: 1; grid-row: 1; }
+    .copy-more { grid-column: 1; grid-row: 2; align-self: start; }
+    .stage { grid-column: 2; grid-row: 1 / span 2; }
+    .kicker { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 400; font-size: clamp(34px, 4vw, 48px); line-height: 1.08;
+      letter-spacing: -0.02em; margin-bottom: 16px;
+    }
+    .lead, .note, .hint { color: var(--muted); font-size: 14px; line-height: 1.75; }
+    .lead { margin-bottom: 16px; }
+    .note { margin-bottom: 22px; }
+    .mail {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+      border: 1px solid var(--garden); background: var(--garden); color: var(--paper);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .mail:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
+    .hint { margin-top: 12px; font-size: 12px; }
+    .fine { margin-top: 28px; font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+    .fine a { border-bottom: 1px solid var(--line-strong); }
+    .fine a:hover { color: var(--accent); }
+    .keys { margin-top: 18px; font-size: 12px; color: var(--muted); max-width: 46ch; }
+    .toolbar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .tool-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+    .tool-group {
+      display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 4px; border-radius: 999px;
+    }
+    .group-label {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+      padding: 0 4px 0 2px;
+    }
+    .tool, .text-btn {
+      min-height: 40px; padding: 0 14px;
+      border: 1px solid var(--line-strong); border-radius: 999px;
+      background: rgba(255,250,244,0.72);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .tool[aria-pressed="true"] {
+      border-color: var(--garden); background: var(--paper);
+      box-shadow: inset 0 0 0 1px var(--garden);
+    }
+    .size-group { gap: 10px; padding: 0 6px; }
+    .size-group label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); display: inline-flex; gap: 6px; align-items: baseline; }
+    #size-val { letter-spacing: 0; font-variant-numeric: tabular-nums; color: var(--ink); }
+    input[type="range"] { width: 124px; accent-color: var(--garden); height: 28px; }
+    .swatch {
+      width: 26px; height: 26px; border-radius: 50%; padding: 0;
+      border: 1px solid var(--line-strong); background: var(--swatch);
+    }
+    .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--garden); }
+    .stamp-btn {
+      width: 46px; height: 46px; padding: 4px; position: relative;
+      border: 1px solid var(--line-strong); border-radius: 4px;
+      background: rgba(255,250,244,0.85);
+    }
+    .stamp-btn[aria-pressed="true"] { border-color: var(--garden); box-shadow: inset 0 0 0 1px var(--garden); }
+    .stamp-btn canvas { width: 100%; height: 100%; display: block; pointer-events: none; }
+    .actions { margin-top: 12px; }
+    .text-btn.primary { background: var(--garden); color: var(--paper); border-color: var(--garden); }
+    .text-btn.primary:hover:not(:disabled) { background: var(--ink-soft); border-color: var(--ink-soft); }
+    .board {
+      position: relative;
+      width: 100%;
+      height: min(68vh, 680px);
+      min-height: 360px;
+      border-radius: 3px;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      background: #f6efe6;
+      box-shadow: 0 18px 50px rgba(77,94,74,0.12);
+    }
+    #garden-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+    .board[data-mode="draw"] #garden-canvas { cursor: crosshair; }
+    .board[data-mode="erase"] #garden-canvas { cursor: cell; }
+    .board[data-mode="stamp"] #garden-canvas { cursor: copy; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    noscript p { margin-top: 12px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 860px) {
+      .top { padding: 16px 16px 4px; }
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 18px;
+        padding: 12px 16px 48px;
+      }
+      .copy-intro, .copy-more, .stage { grid-column: 1; grid-row: auto; }
+      .stage { order: 2; }
+      .copy-intro { order: 1; }
+      .copy-more { order: 3; }
+      .board { height: min(58vh, 480px); min-height: 280px; }
+      .mail { width: 100%; justify-content: center; }
+      input[type="range"] { width: 108px; }
+      .lead { margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wash" aria-hidden="true"></div>
+  <a class="skip" href="#studio" data-i18n="skip">Skip to content</a>
+  <header class="top">
+    <a class="brand" href="index.html">NoY</a>
+    <div class="top-actions">
+      <a class="back" href="index.html#garden" data-i18n="gs.back">Back to the garden</a>
+      <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="sep" aria-hidden="true">|</span>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout" id="studio">
+    <div class="copy-intro">
+      <p class="kicker" data-i18n="gs.kicker">Garden Studio</p>
+      <h1 data-i18n="gs.title">Doodle and mix. Leave the inspiration with NoY.</h1>
+      <p class="lead" data-i18n="gs.lead">A sheet of garden paper. Draw freely, or lightly mix a few silhouettes — tee, knit, sprig. Colour and placement, for play. This is not an order.</p>
+    </div>
+
+    <div class="stage">
+      <div class="toolbar" role="toolbar" data-i18n-aria="gs.tools" aria-label="Studio tools">
+        <div class="tool-row">
+          <div class="tool-group" role="group" data-i18n-aria="gs.tools" aria-label="Studio tools">
+            <button type="button" class="tool" data-tool="draw" aria-pressed="true" data-i18n="gs.draw">Draw</button>
+            <button type="button" class="tool" data-tool="erase" aria-pressed="false" data-i18n="gs.eraser">Eraser</button>
+          </div>
+          <div class="tool-group size-group">
+            <label for="brush-size"><span data-i18n="gs.size">Size</span> <span id="size-val">8</span></label>
+            <input id="brush-size" type="range" min="2" max="34" step="1" value="8" />
+          </div>
+          <div class="tool-group" role="group" data-i18n-aria="gs.colors" aria-label="Colours">
+            <span class="group-label" data-i18n="gs.colors">Colours</span>
+            <button type="button" class="swatch" data-color="#2c322c" style="--swatch:#2c322c" data-i18n-aria="gs.color.ink" aria-label="Ink" aria-pressed="false"></button>
+            <button type="button" class="swatch" data-color="#4d5e4a" style="--swatch:#4d5e4a" data-i18n-aria="gs.color.garden" aria-label="Garden" aria-pressed="true"></button>
+            <button type="button" class="swatch" data-color="#6f8264" style="--swatch:#6f8264" data-i18n-aria="gs.color.sage" aria-label="Sage" aria-pressed="false"></button>
+            <button type="button" class="swatch" data-color="#9a7fa6" style="--swatch:#9a7fa6" data-i18n-aria="gs.color.lilac" aria-label="Lilac" aria-pressed="false"></button>
+            <button type="button" class="swatch" data-color="#c48984" style="--swatch:#c48984" data-i18n-aria="gs.color.blush" aria-label="Blush" aria-pressed="false"></button>
+            <button type="button" class="swatch" data-color="#6d5a78" style="--swatch:#6d5a78" data-i18n-aria="gs.color.dusk" aria-label="Dusk" aria-pressed="false"></button>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-group" role="group" data-i18n-aria="gs.stamps" aria-label="Stamps">
+            <span class="group-label" data-i18n="gs.stamps">Stamps</span>
+            <button type="button" class="stamp-btn" data-tool="tee" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.tee">Soft tee</span></button>
+            <button type="button" class="stamp-btn" data-tool="knit" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.knit">Light knit</span></button>
+            <button type="button" class="stamp-btn" data-tool="sprig" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.sprig">Lilac sprig</span></button>
+            <button type="button" class="stamp-btn" data-tool="leaf" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.leaf">Leaf</span></button>
+            <button type="button" class="stamp-btn" data-tool="petal" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.petal">Petal</span></button>
+            <button type="button" class="stamp-btn" data-tool="lily" aria-pressed="false"><canvas class="stamp-icon" width="72" height="72" aria-hidden="true"></canvas><span class="sr" data-i18n="gs.stamp.lily">Water lily</span></button>
+          </div>
+        </div>
+        <div class="tool-row" role="group" data-i18n-aria="gs.edit" aria-label="Selected stamp">
+          <button type="button" class="text-btn" id="stamp-smaller" data-i18n="gs.smaller" disabled>Smaller</button>
+          <button type="button" class="text-btn" id="stamp-larger" data-i18n="gs.larger" disabled>Larger</button>
+          <button type="button" class="text-btn" id="stamp-remove" data-i18n="gs.remove" aria-keyshortcuts="Delete" disabled>Remove stamp</button>
+          <button type="button" class="text-btn" id="undo" data-i18n="gs.undo" aria-keyshortcuts="Control+Z Meta+Z" disabled>Undo</button>
+          <button type="button" class="text-btn" id="clear" data-i18n="gs.clear">Clear</button>
+          <button type="button" class="text-btn primary" id="download" data-i18n="gs.download">Download PNG</button>
+        </div>
+      </div>
+
+      <div class="board" id="board" data-mode="draw">
+        <canvas id="garden-canvas" tabindex="0" data-i18n-aria="gs.canvas" aria-label="Garden paper. Draw with a pointer, or drag a stamp." aria-describedby="studio-keys"></canvas>
+      </div>
+      <p class="keys" id="studio-keys" data-i18n="gs.keys">Undo with Ctrl or ⌘ Z. Select a stamp, then use arrow keys to move, + and − to resize, and Delete to remove it.</p>
+      <div id="live" class="sr" aria-live="polite"></div>
+    </div>
+    <div class="copy-more">
+      <p class="note" data-i18n="gs.note">For fun, and to share a mood with NoY. Not a product order, a size hold, or checkout. Download a PNG if you’d like to send it along.</p>
+      <a class="mail" id="mail-link" href="mailto:zhaojinxiu0525@gmail.com?subject=NoY%20garden%20inspiration" data-i18n="gs.mail">Email this inspiration</a>
+      <p class="hint" data-i18n="gs.mailhint">Your mail app opens a draft. Attach the PNG you downloaded — this page cannot upload a file.</p>
+      <p class="fine">
+        <a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
+        <span aria-hidden="true">·</span>
+        <a href="tel:+8615993986893">15993986893</a>
+      </p>
+      <noscript><p>Garden studio needs JavaScript to draw. 花园灵感需要 JavaScript 才能涂鸦。</p></noscript>
+    </div>
+  </main>
+  <script src="assets/i18n.js"></script>
+  <script src="assets/garden-studio.js"></script>
+</body>
+</html>
