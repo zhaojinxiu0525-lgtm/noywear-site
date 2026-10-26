@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NoY — Garden Studio</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <meta name="description" content="Draw on garden paper, keep your pieces, and hang them on the garden wall. Play — not an order." data-i18n="gs.desc" />
+  <meta name="description" content="Draw on garden paper and keep your pieces on this device. Play — not an order." data-i18n="gs.desc" />
   <meta name="theme-color" content="#f4eee6" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -182,7 +182,6 @@
       letter-spacing: -0.02em; line-height: 1.08; margin-bottom: 8px;
     }
     .gallery .lead { max-width: 46ch; }
-    .wall-note, .mine-note, .wall-status { margin-top: 8px; color: var(--muted); font-size: 13px; }
     .piece-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -343,11 +342,9 @@
     <div class="copy-more">
       <p class="note" data-i18n="gs.note">The piece stays yours. Not a product order, a size hold, or checkout.</p>
       <button type="button" class="hang-cta" id="hang-side" data-i18n="gs.hang.long">Hang my piece in the garden</button>
-      <p class="hint" id="hang-hint">It stays in My pieces on this device, ready whenever you come back.</p>
+      <p class="hint" id="hang-hint" data-i18n="gs.hint.local">It stays in My pieces on this device, ready whenever you come back.</p>
       <p class="jumps">
         <a href="#my-pieces" data-i18n="gs.mine.link">See my pieces</a>
-        <span aria-hidden="true">·</span>
-        <a href="#garden-wall" data-i18n="gs.wall">Garden wall</a>
       </p>
       <p class="fine">
         <a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
@@ -358,18 +355,9 @@
     </div>
   </div>
 
-  <section class="gallery" id="garden-wall" aria-labelledby="wall-title">
-    <h2 id="wall-title" data-i18n="gs.wall">Garden wall</h2>
-    <p class="lead" data-i18n="gs.wall.lead">Newest first. Every piece hung here belongs to the person who made it.</p>
-    <p class="wall-note" id="wall-note" hidden></p>
-    <p class="wall-status" id="wall-status"></p>
-    <div class="piece-grid" id="wall-grid"></div>
-  </section>
-
   <section class="gallery" id="my-pieces" aria-labelledby="mine-title">
     <h2 id="mine-title" data-i18n="gs.mine">My pieces</h2>
     <p class="lead" data-i18n="gs.mine.lead">Saved on this device. Open one to keep drawing.</p>
-    <p class="mine-note" id="mine-note" hidden></p>
     <div class="piece-grid" id="mine-grid"></div>
   </section>
 
@@ -377,7 +365,7 @@
     <form id="hang-form">
       <p class="kicker" data-i18n="gs.form.kicker">Your piece</p>
       <h2 id="hang-heading" data-i18n="gs.form.heading">Hang my piece in the garden</h2>
-      <p class="hint" id="form-hint">Optional. A copy stays in My pieces on this device, so you can open it again.</p>
+      <p class="hint" id="form-hint" data-i18n="gs.form.hint">Optional. It stays in My pieces on this device, so you can open it again.</p>
       <label class="field">
         <span data-i18n="gs.form.title">A title</span>
         <input id="piece-title" name="title" maxlength="60" autocomplete="off" data-i18n-placeholder="gs.form.titlePh" placeholder="Evening path" />
@@ -394,7 +382,6 @@
     </form>
   </dialog>
   </main>
-  <script src="assets/garden-config.js"></script>
   <script src="assets/i18n.js"></script>
   <script src="assets/garden-studio.js"></script>
 </body>

@@ -1,4 +1,4 @@
-/* NoY Garden Studio — doodle on garden paper, keep a piece, hang it on the wall. */
+/* NoY Garden Studio — doodle on garden paper and keep a piece on this device. */
 (function () {
   const canvas = document.getElementById("garden-canvas");
   const board = document.getElementById("board");
@@ -51,11 +51,8 @@
   const PIECE_STORE = "noy-garden-pieces";
   const SIGN_STORE = "noy-garden-signature";
   let myPieces = [];
-  let remotePieces = null;
-  let wallError = false;
   let hanging = false;
   let hangOpener = null;
-  let warnedKey = false;
 
   function t(key) {
     return I18N ? I18N.t(currentLang, key) : key;
@@ -455,17 +452,6 @@
     return out;
   }
 
-  function canvasToJpegBlob(source, maxEdge, quality) {
-    const out = scaledCanvas(source, maxEdge);
-    return new Promise(function (resolve) {
-      if (!out.toBlob) {
-        resolve(null);
-        return;
-      }
-      out.toBlob(function (blob) { resolve(blob); }, "image/jpeg", quality);
-    });
-  }
-
   function sync() {
     document.querySelectorAll("[data-tool]").forEach(function (btn) {
       const on = btn.getAttribute("data-tool") === tool;
@@ -802,48 +788,6 @@
     return String(value || "").replace(/[\u0000-\u001F\u007F]/g, "").replace(/\s+/g, " ").trim().slice(0, max);
   }
 
-  function jwtRole(key) {
-    try {
-      const part = String(key).split(".")[1];
-      if (!part) return "";
-      const pad = part.replace(/-/g, "+").replace(/_/g, "/");
-      const json = JSON.parse(atob(pad));
-      return json && json.role ? String(json.role) : "";
-    } catch (_) {
-      return "";
-    }
-  }
-
-  function warnSecretKey() {
-    if (warnedKey) return;
-    warnedKey = true;
-    console.warn("NoY garden wall: refusing a secret key. Paste the anon or publishable key only.");
-  }
-
-  function keyIsPublic(key) {
-    if (!key) return false;
-    if (key.indexOf("sb_secret_") === 0) {
-      warnSecretKey();
-      return false;
-    }
-    if (jwtRole(key) === "service_role") {
-      warnSecretKey();
-      return false;
-    }
-    return true;
-  }
-
-  function gardenConfig() {
-    const c = window.NOY_GARDEN_CONFIG || {};
-    const url = String(c.supabaseUrl || "").trim().replace(/\/+$/, "");
-    const key = String(c.supabaseAnonKey || "").trim();
-    const bucket = String(c.bucket || "garden-pieces").trim();
-    if (!/^https:\/\/[a-z0-9.-]+$/i.test(url)) return null;
-    if (!/^[a-z0-9][a-z0-9-]{0,47}$/i.test(bucket)) return null;
-    if (!keyIsPublic(key)) return null;
-    return { url: url, key: key, bucket: bucket };
-  }
-
   function hasArt() {
     if (stamps.length) return true;
     return strokes.some(function (s) { return s.points && s.points.length; });
@@ -955,86 +899,10 @@
     try { return localStorage.getItem(SIGN_STORE) || ""; } catch (_) { return ""; }
   }
 
-  function withTimeout(ms) {
-    if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
-      return AbortSignal.timeout(ms);
-    }
-    return undefined;
-  }
-
-  function apiHeaders(cfg, extra) {
-    const headers = {
-      apikey: cfg.key,
-      Authorization: "Bearer " + cfg.key
-    };
-    if (extra) Object.keys(extra).forEach(function (k) { headers[k] = extra[k]; });
-    return headers;
-  }
-
-  function publicImageUrl(cfg, path) {
-    return cfg.url + "/storage/v1/object/public/" + cfg.bucket + "/" + String(path || "").replace(/^\/+/, "");
-  }
-
   function safeSrc(src) {
     if (!src || typeof src !== "string") return "";
     if (src.indexOf("data:image/jpeg") === 0 || src.indexOf("data:image/png") === 0) return src;
-    if (/^https:\/\/[a-z0-9.-]+\/\S+$/i.test(src)) return src;
     return "";
-  }
-
-  async function publishPiece(id, blob, title, name) {
-    const cfg = gardenConfig();
-    if (!cfg || !blob) return { ok: false };
-    const path = id + ".jpg";
-    const signal = withTimeout(20000);
-    try {
-      const up = await fetch(cfg.url + "/storage/v1/object/" + cfg.bucket + "/" + path, {
-        method: "POST",
-        headers: apiHeaders(cfg, { "Content-Type": "image/jpeg" }),
-        body: blob,
-        signal: signal
-      });
-      if (!up.ok) return { ok: false };
-      const row = await fetch(cfg.url + "/rest/v1/garden_pieces", {
-        method: "POST",
-        headers: apiHeaders(cfg, { "Content-Type": "application/json", Prefer: "return=minimal" }),
-        body: JSON.stringify({
-          id: id,
-          display_name: name || null,
-          title: title || null,
-          image_path: path,
-          published: true
-        }),
-        signal: signal
-      });
-      if (!row.ok) return { ok: false };
-      return { ok: true, url: publicImageUrl(cfg, path) };
-    } catch (_) {
-      return { ok: false };
-    }
-  }
-
-  async function fetchWall() {
-    const cfg = gardenConfig();
-    if (!cfg) return null;
-    const query = "select=id,created_at,display_name,title,image_path&published=eq.true&order=created_at.desc&limit=30";
-    const res = await fetch(cfg.url + "/rest/v1/garden_pieces?" + query, {
-      headers: apiHeaders(cfg),
-      cache: "no-store",
-      signal: withTimeout(15000)
-    });
-    if (!res.ok) throw new Error("wall");
-    const rows = await res.json();
-    if (!Array.isArray(rows)) throw new Error("wall");
-    return rows.map(function (row) {
-      return {
-        id: row.id,
-        title: cleanText(row.title, 60),
-        name: cleanText(row.display_name, 40),
-        createdAt: row.created_at,
-        src: publicImageUrl(cfg, row.image_path)
-      };
-    });
   }
 
   function formatWhen(iso) {
@@ -1051,39 +919,20 @@
     }
   }
 
-  function syncKeepCopy() {
-    const on = !!gardenConfig();
-    const hint = document.getElementById("hang-hint");
-    const formHint = document.getElementById("form-hint");
-    const mineNote = document.getElementById("mine-note");
-    const wallNote = document.getElementById("wall-note");
-    if (hint) hint.textContent = t(on ? "gs.hint.public" : "gs.hint.local");
-    if (formHint) formHint.textContent = t(on ? "gs.form.hint" : "gs.form.hintLocal");
-    if (mineNote) {
-      mineNote.hidden = !on;
-      mineNote.textContent = on ? t("gs.mine.note") : "";
-    }
-    if (wallNote) {
-      const show = !on && myPieces.length > 0;
-      wallNote.hidden = !show;
-      wallNote.textContent = show ? t("gs.wall.device") : "";
-    }
-  }
-
-  function fillGrid(grid, items, mode) {
+  function fillGrid(grid, items) {
     if (!grid) return;
     grid.textContent = "";
     if (!items.length) {
       const empty = document.createElement("p");
       empty.className = "empty-line";
-      empty.textContent = t(mode === "mine" ? "gs.mine.empty" : "gs.wall.empty");
+      empty.textContent = t("gs.mine.empty");
       grid.appendChild(empty);
       return;
     }
     items.forEach(function (item) {
       const card = document.createElement("article");
       card.className = "piece-card";
-      const src = safeSrc(item.src || item.thumb || item.imageUrl || "");
+      const src = safeSrc(item.thumb || "");
       if (src) {
         const img = document.createElement("img");
         img.src = src;
@@ -1107,67 +956,27 @@
       if (when) bits.push(when);
       meta.textContent = bits.join(" · ");
       card.appendChild(meta);
-      if (mode === "mine") {
-        const actions = document.createElement("div");
-        actions.className = "piece-actions";
-        const openBtn = document.createElement("button");
-        openBtn.type = "button";
-        openBtn.className = "text-btn";
-        openBtn.textContent = t("gs.open");
-        openBtn.addEventListener("click", function () { openPiece(item.id); });
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.className = "text-btn";
-        removeBtn.textContent = t("gs.removeMine");
-        removeBtn.addEventListener("click", function () { removePiece(item.id); });
-        actions.appendChild(openBtn);
-        actions.appendChild(removeBtn);
-        card.appendChild(actions);
-      }
+      const actions = document.createElement("div");
+      actions.className = "piece-actions";
+      const openBtn = document.createElement("button");
+      openBtn.type = "button";
+      openBtn.className = "text-btn";
+      openBtn.textContent = t("gs.open");
+      openBtn.addEventListener("click", function () { openPiece(item.id); });
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "text-btn";
+      removeBtn.textContent = t("gs.removeMine");
+      removeBtn.addEventListener("click", function () { removePiece(item.id); });
+      actions.appendChild(openBtn);
+      actions.appendChild(removeBtn);
+      card.appendChild(actions);
       grid.appendChild(card);
     });
   }
 
-  function wallItems() {
-    if (gardenConfig()) return remotePieces || [];
-    return myPieces.map(function (p) {
-      return {
-        id: p.id,
-        title: p.title,
-        name: p.name,
-        createdAt: p.createdAt,
-        src: p.thumb || ""
-      };
-    });
-  }
-
   function renderKeep() {
-    syncKeepCopy();
-    const status = document.getElementById("wall-status");
-    if (status) status.textContent = wallError ? t("gs.wall.error") : "";
-    fillGrid(document.getElementById("wall-grid"), wallItems(), "wall");
-    fillGrid(document.getElementById("mine-grid"), myPieces, "mine");
-  }
-
-  async function refreshWall() {
-    const status = document.getElementById("wall-status");
-    if (!gardenConfig()) {
-      remotePieces = null;
-      wallError = false;
-      renderKeep();
-      return;
-    }
-    if (status && !remotePieces) status.textContent = t("gs.loading");
-    try {
-      remotePieces = await fetchWall();
-      wallError = false;
-    } catch (_) {
-      if (!remotePieces) {
-        remotePieces = [];
-        wallError = true;
-      }
-    }
-    renderKeep();
+    fillGrid(document.getElementById("mine-grid"), myPieces);
   }
 
   function scrollToId(id) {
@@ -1201,7 +1010,7 @@
     if (hangOpener && hangOpener.focus) hangOpener.focus();
   }
 
-  async function hangPiece(event) {
+  function hangPiece(event) {
     event.preventDefault();
     if (hanging) return;
     if (!hasArt()) {
@@ -1221,70 +1030,30 @@
     rememberSignature(name);
     const id = uuid();
     const flat = exportCanvas();
-    let blob = await canvasToJpegBlob(flat, 1280, 0.82);
-    if (blob && blob.size > 450000) blob = await canvasToJpegBlob(flat, 960, 0.66);
     const record = {
       id: id,
       title: title,
       name: name,
       createdAt: new Date().toISOString(),
       thumb: scaledCanvas(flat, 640).toDataURL("image/jpeg", 0.7),
-      state: packState(),
-      onWall: false
+      state: packState()
     };
-    let saved = saveList([record].concat(loadPieces().filter(function (p) { return p.id !== id; })));
-    let published = false;
-    const configured = !!gardenConfig();
-    if (configured && blob) {
-      const result = await publishPiece(id, blob, title, name);
-      if (result.ok) {
-        published = true;
-        record.onWall = true;
-        record.imageUrl = result.url;
-        saved = saveList([record].concat(loadPieces().filter(function (p) { return p.id !== id; }))) || saved;
-      }
-    }
-    if (saved) myPieces = saved;
+    const saved = saveList([record].concat(loadPieces().filter(function (p) { return p.id !== id; })));
     hanging = false;
     if (submit) submit.disabled = false;
     if (cancel) cancel.disabled = false;
     if (status) status.textContent = "";
-    if (!saved && !published) {
+    if (!saved) {
       announce("gs.did.nospace");
       return;
     }
+    myPieces = saved;
     const titleInput = document.getElementById("piece-title");
     if (titleInput) titleInput.value = "";
     closeHang();
-    if (published) {
-      const item = {
-        id: id,
-        title: title,
-        name: name,
-        createdAt: record.createdAt,
-        src: record.imageUrl
-      };
-      remotePieces = [item].concat((remotePieces || []).filter(function (p) { return p.id !== id; }));
-      wallError = false;
-      renderKeep();
-      announce("gs.did.hung");
-      scrollToId("garden-wall");
-      refreshWall().then(function () {
-        if (remotePieces && !remotePieces.some(function (p) { return p.id === id; })) {
-          remotePieces.unshift(item);
-          wallError = false;
-          renderKeep();
-        }
-      });
-    } else if (configured) {
-      renderKeep();
-      announce("gs.did.wallfail");
-      scrollToId("my-pieces");
-    } else {
-      renderKeep();
-      announce("gs.did.saved");
-      scrollToId("garden-wall");
-    }
+    renderKeep();
+    announce("gs.did.saved");
+    scrollToId("my-pieces");
   }
 
   function openPiece(id) {
@@ -1395,7 +1164,6 @@
     fit();
     paintIcons();
     renderKeep();
-    refreshWall();
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
         if (!cssW) return;
