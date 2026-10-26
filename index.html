@@ -1,16 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NoY — Softwear in a Quiet Garden</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <meta name="description" content="NoY — soft tees and light knits for unhurried days. A Monet-garden mood for everyday wear." />
-  <meta name="theme-color" content="#f4eee6" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
+<!-- Photos: real Unsplash/Pexels stock replacing AI stills. See PHOTO-CREDITS.txt. Contact zhaojinxiu0525@gmail.com / 15993986893. i18n: localStorage noy-lang; default zh* browser → zh else en. -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>NoY — Softwear in a Quiet Garden</title>
+<link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
+<meta content="NoY — soft tees and light knits for unhurried days. A Monet-garden mood for everyday wear." name="description"/>
+<meta content="#f4eee6" name="theme-color"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<style>
     :root {
       --bg: #f4eee6;
       --paper: #fffaf4;
@@ -630,382 +632,386 @@
       .contact-band { padding: 64px 20px; }
       .mobile-nav { padding-left: 20px; padding-right: 20px; }
     }
-  </style>
-</head>
+  
+    /* Language switch */
+    .lang-switch {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      margin-left: 8px;
+    }
+    .lang-switch button { opacity: 0.42; padding: 4px 2px; transition: opacity .2s; }
+    .lang-switch button:hover { opacity: 0.85; }
+    .lang-switch button.is-active { opacity: 1; border-bottom: 1px solid var(--garden); }
+    .lang-switch .sep { opacity: 0.3; }
+    .mobile-nav .lang-switch { margin: 8px 0 0; }
+    /* Clickable atelier / collection cards */
+    a.tile-link, a.look-link {
+      color: inherit; text-decoration: none; display: block; height: 100%;
+    }
+    a.tile-link:focus-visible, a.look-link:focus-visible {
+      outline: 1.5px solid var(--accent); outline-offset: 4px;
+    }
+    .tile { transition: transform .45s ease; }
+    a.tile-link:hover .tile, a.tile-link:focus-visible .tile { transform: translateY(-2px); }
+</style>
+<script src="assets/i18n.js"></script></head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-  <div class="light-pools" aria-hidden="true"><span class="pool a"></span><span class="pool b"></span><span class="pool c"></span></div>
-  <div class="garden-sky" aria-hidden="true">
-    <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span>
-  </div>
-
-  <header class="topbar" id="topbar">
-    <div class="topbar-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="#atelier">Atelier</a>
-        <a href="#collection">Collection</a>
-        <a href="#shop">Shop</a>
-      </nav>
-      <a class="brand" href="#top" id="top">NoY</a>
-      <nav class="nav-right" aria-label="Secondary">
-        <a href="#about">About</a>
-        <a href="#private">Private Client</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" id="menu-toggle"><span></span></button>
-    </div>
-    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
-      <a href="#atelier">Atelier</a>
-      <a href="#collection">Collection</a>
-      <a href="#shop">Shop</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#shipping">Shipping &amp; Returns</a>
-      <a href="#care">Care</a>
-      <a href="#size">Size &amp; Fit</a>
-      <a href="#private">Private Client</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-stage">
-        <div class="hero-wash" aria-hidden="true"></div>
-        <div class="frame main">
-          <img src="assets/hero.jpg" alt="Cream soft tee among lilac petals in dappled garden light" width="864" height="1152" loading="eager" />
-        </div>
-        <div class="frame float-b">
-          <img src="assets/detail-petal-knit.jpg" alt="Lilac petal on soft knit under dappled sun" width="1000" height="1000" loading="eager" />
-        </div>
-        <div class="frame float-a">
-          <img src="assets/wisteria-knit.jpg" alt="Light knit hanging under wisteria blooms" width="864" height="1152" loading="eager" />
-        </div>
-      </div>
-      <div class="hero-copy reveal">
-        <p class="eyebrow">Soft tees · Light knits · Garden light</p>
-        <h1 id="hero-title">Come in.<br /><em>Stay a while.</em></h1>
-        <p class="hero-verse">Cloth as quiet as late light through leaves.</p>
-        <p class="hero-lead">
+<a class="skip" data-i18n="skip" href="#main">Skip to content</a>
+<div aria-hidden="true" class="light-pools"><span class="pool a"></span><span class="pool b"></span><span class="pool c"></span></div>
+<div aria-hidden="true" class="garden-sky">
+<span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span>
+</div>
+<header class="topbar" id="topbar">
+<div class="topbar-inner">
+<nav aria-label="Primary" class="nav-left" data-i18n-aria="nav.primary">
+<a data-i18n="nav.atelier" href="#atelier">Atelier</a>
+<a data-i18n="nav.collection" href="#collection">Collection</a>
+<a data-i18n="nav.shop" href="#shop">Shop</a>
+</nav>
+<a class="brand" href="#top" id="top">NoY</a>
+<nav aria-label="Secondary" class="nav-right" data-i18n-aria="nav.secondary">
+<a data-i18n="nav.about" href="#about">About</a>
+<a data-i18n="nav.private" href="#private">Private Client</a>
+<a data-i18n="nav.contact" href="#contact">Contact</a>
+<div aria-label="Language" class="lang-switch" data-i18n-aria="lang.label" role="group"><button aria-pressed="true" data-lang="en" type="button">EN</button><span aria-hidden="true" class="sep">|</span><button aria-pressed="false" data-lang="zh" type="button">中文</button></div></nav>
+<button aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu" class="menu-toggle" data-i18n-aria="nav.menuOpen" id="menu-toggle" type="button"><span></span></button>
+</div>
+<nav aria-label="Mobile" class="mobile-nav" data-i18n-aria="nav.mobile" id="mobile-nav">
+<a data-i18n="nav.atelier" href="#atelier">Atelier</a>
+<a data-i18n="nav.collection" href="#collection">Collection</a>
+<a data-i18n="nav.shop" href="#shop">Shop</a>
+<a data-i18n="nav.about" href="#about">About</a>
+<a data-i18n="nav.services" href="#services">Services</a>
+<a data-i18n="nav.shipping" href="#shipping">Shipping &amp; Returns</a>
+<a data-i18n="nav.care" href="#care">Care</a>
+<a data-i18n="nav.size" href="#size">Size &amp; Fit</a>
+<a data-i18n="nav.private" href="#private">Private Client</a>
+<a data-i18n="nav.contact" href="#contact">Contact</a>
+<div aria-label="Language" class="lang-switch" data-i18n-aria="lang.label" role="group"><button aria-pressed="true" data-lang="en" type="button">EN</button><span aria-hidden="true" class="sep">|</span><button aria-pressed="false" data-lang="zh" type="button">中文</button></div></nav>
+</header>
+<main id="main">
+<section aria-labelledby="hero-title" class="hero">
+<div class="hero-stage">
+<div aria-hidden="true" class="hero-wash"></div>
+<div class="frame main">
+<img alt="Lilac blossoms in soft garden light" data-i18n-alt="alt.hero" height="1152" loading="eager" src="assets/hero.jpg" width="864"/>
+</div>
+<div class="frame float-b">
+<img alt="Lilac branch resting on white linen" data-i18n-alt="alt.detail" height="1000" loading="eager" src="assets/detail-petal-knit.jpg" width="1000"/>
+</div>
+<div class="frame float-a">
+<img alt="Close-up of lilac blooms in warm sun" data-i18n-alt="alt.wisteria" height="1152" loading="eager" src="assets/wisteria-knit.jpg" width="864"/>
+</div>
+</div>
+<div class="hero-copy reveal">
+<p class="eyebrow" data-i18n="hero.eyebrow">Soft tees · Light knits · Garden light</p>
+<h1 data-i18n="hero.title" data-i18n-html="hero.title" id="hero-title">Come in.<br/><em>Stay a while.</em></h1>
+<p class="hero-verse" data-i18n="hero.verse">Cloth as quiet as late light through leaves.</p>
+<p class="hero-lead" data-i18n="hero.lead">
           NoY makes soft tees and light knits for days that refuse to hurry—
           pieces that feel like walking into a garden: airy, a little painterly, entirely yours.
         </p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#atelier">Step into the atelier</a>
-          <a class="text-link" href="#collection">The first edit</a>
-        </div>
-      </div>
-    </section>
-
-    <aside class="verse-band reveal" aria-label="Garden note">
-      <span class="mark" aria-hidden="true">“</span>
-      <p>Not a lobby. A garden path—lilac, sage, cream, and time enough to choose one good thing.</p>
-      <span class="cn">像走进莫奈的花园。</span>
-    </aside>
-
-    <div class="path-bleed reveal" aria-hidden="false">
-      <img src="assets/path-linen.jpg" alt="Garden path with cream linen on a stone bench" width="1280" height="720" loading="lazy" />
-      <p class="caption">Afternoon. Linen on stone. Nowhere to be.</p>
-    </div>
-
-    <section class="section tight reveal" id="atelier" aria-labelledby="atelier-title">
-      <div class="section-head">
-        <div>
-          <p class="section-label">Atelier · Mood</p>
-          <h2 id="atelier-title">Studies in soft light</h2>
-        </div>
-        <p>Botanical stills, brushed colour, and cloth at rest—an editorial garden for softwear, not a product grid.</p>
-      </div>
-    </section>
-    <div class="atelier-wrap reveal">
-      <div class="atelier">
-        <figure class="tile t1"><img src="assets/mood-knit-garden.jpg" alt="Knit on garden chair with cream roses" width="864" height="1152" loading="lazy" /><figcaption>Chair &amp; knit</figcaption></figure>
-        <figure class="tile t2"><img src="assets/mood-lilac.jpg" alt="Lilac peony mood board" width="1152" height="864" loading="lazy" /><figcaption>Colour board</figcaption></figure>
-        <figure class="tile t3"><img src="assets/collage-atelier.jpg" alt="Torn paper collage with knit sleeve and pressed flowers" width="864" height="1152" loading="lazy" /><figcaption>Collage</figcaption></figure>
-        <figure class="tile t4"><img src="assets/mood-tee-petal.jpg" alt="Soft tee with blush rose" width="864" height="1152" loading="lazy" /><figcaption>Tee &amp; rose</figcaption></figure>
-        <figure class="tile t5"><img src="assets/mood-lilies.jpg" alt="Impressionist water lilies" width="1152" height="864" loading="lazy" /><figcaption>Water light</figcaption></figure>
-        <figure class="tile t6"><img src="assets/detail-petal-knit.jpg" alt="Petal on knit close-up" width="1000" height="1000" loading="lazy" /><figcaption>Petal detail</figcaption></figure>
-        <figure class="tile t7"><img src="assets/still-water-tee.jpg" alt="Folded tee with water glass and lilac florets" width="1152" height="864" loading="lazy" /><figcaption>Still life</figcaption></figure>
-        <figure class="tile t8"><img src="assets/brush-breeze.jpg" alt="Abstract brushstroke garden breeze" width="1280" height="720" loading="lazy" /><figcaption>Breeze</figcaption></figure>
-      </div>
-    </div>
-
-    <section class="section tight reveal" id="shop" aria-labelledby="shop-title">
-      <div class="section-head">
-        <div>
-          <p class="section-label">Shop</p>
-          <h2 id="shop-title">Opening soon</h2>
-        </div>
-        <p>The store arrives with the first drop. Until then, ask for a Private Client preview—no checkout on this page.</p>
-      </div>
-      <div class="services-grid shop-teaser">
-        <article class="service-card">
-          <span class="num">Online</span>
-          <h3>noywear.com</h3>
-          <p>When samples settle, product pages will carry fabric notes, fit guidance, and soft photography—kept breezy, never loud.</p>
-          <a class="text-link" href="#private">Join the preview list</a>
-        </article>
-        <article class="service-card">
-          <span class="num">Direct</span>
-          <h3>Private Client</h3>
-          <p>Early colourways, size holds, small-batch pieces. Write with your preferences; we reply personally.</p>
-          <a class="text-link" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="section reveal" id="collection" aria-labelledby="collection-title">
-      <div class="section-head">
-        <div>
-          <p class="section-label">Collection</p>
-          <h2 id="collection-title">The first edit</h2>
-        </div>
-        <p>Three silhouettes to begin: soft tee, light knit, fresh cut. Small runs—hand-feel before scale.</p>
-      </div>
-      <div class="collection">
-        <article class="look featured">
-          <div class="look-media">
-            <img src="assets/soft-tee.jpg" alt="NoY Soft Tee in warm oatmeal" width="864" height="1152" loading="lazy" />
-            <span class="look-badge">01 · Core</span>
-          </div>
-          <div class="look-meta">
-            <h3>Soft Tee</h3>
-            <p>Clean crew, considered necklines. Tones that sit close without clinging.</p>
-            <span class="status">Preview · Coming soon</span>
-          </div>
-        </article>
-        <article class="look">
-          <div class="look-media">
-            <img src="assets/light-knit.jpg" alt="NoY Light Knit in soft taupe" width="864" height="1152" loading="lazy" />
-            <span class="look-badge">02</span>
-          </div>
-          <div class="look-meta">
-            <h3>Light Knit</h3>
-            <p>Fine-gauge layers. Breathable, easy to stack under garden light.</p>
-            <span class="status">Preview · Coming soon</span>
-          </div>
-        </article>
-        <article class="look">
-          <div class="look-media">
-            <img src="assets/fresh-cut.jpg" alt="NoY Fresh Cut knit folded on linen" width="864" height="1152" loading="lazy" />
-            <span class="look-badge">03</span>
-          </div>
-          <div class="look-meta">
-            <h3>Fresh Cut</h3>
-            <p>A quiet shift in collar or proportion—still everyday, newly awake.</p>
-            <span class="status">Preview · Coming soon</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <div class="editorial reveal" id="about-band">
-      <div class="editorial-visual">
-        <img src="assets/editorial.jpg" alt="Fine-gauge light knit draped quietly" width="1152" height="864" loading="lazy" />
-        <div class="inset-frame" aria-hidden="true"></div>
-      </div>
-      <div class="editorial-copy">
-        <p class="eyebrow">About NoY</p>
-        <h2>Maison softness.<br />Garden ease.</h2>
-        <p>We like clothes that feel like open air—soft tees and light knits with a painterly calm. Fewer SKUs, clearer silhouettes, fabric finished against skin.</p>
-        <p>Luxury, for us, is leisure: time to choose well, then wear it again tomorrow.</p>
-        <a class="text-link" href="#about">Read the manifesto</a>
-      </div>
-    </div>
-
-    <section class="manifesto" id="about" aria-labelledby="manifesto-title">
-      <div class="brush-bg" aria-hidden="true"></div>
-      <div class="manifesto-card reveal">
-        <p class="eyebrow">Manifesto</p>
-        <blockquote id="manifesto-title">Fewer choices.<br />More ease.</blockquote>
-        <p>Softwear should feel like a garden path—open, unhurried, enough. Clean cuts, quiet information, every piece able to stand alone.</p>
-        <p class="cn">少一点选择，多一点从容。</p>
-      </div>
-    </section>
-
-    <section aria-label="Principles" style="padding:0;">
-      <div class="values">
-        <div class="value reveal"><div class="num">01 — Edited</div><h3>Edited</h3><p>Small drops. Choose the right piece rather than fill a wardrobe.</p></div>
-        <div class="value reveal"><div class="num">02 — Soft</div><h3>Soft</h3><p>Hand-feel and drape first. Tees and knits you reach for again tomorrow.</p></div>
-        <div class="value reveal"><div class="num">03 — Leisure</div><h3>Leisure</h3><p>Basics with a slight shift—collar, cut, or colour—kept breezy.</p></div>
-      </div>
-    </section>
-
-    <section class="section reveal" id="services" aria-labelledby="services-title">
-      <div class="section-head">
-        <div>
-          <p class="section-label">Client Services</p>
-          <h2 id="services-title">How we look after you</h2>
-        </div>
-        <p>Clear policies, quiet support. Shipping, care, and fit—written short and exact.</p>
-      </div>
-      <div class="services-grid">
-        <article class="service-card"><span class="num">01</span><h3>Shipping &amp; Returns</h3><p>Tracked dispatch once the drop opens. Easy returns within a defined window.</p><a class="text-link" href="#shipping">Read policy</a></article>
-        <article class="service-card"><span class="num">02</span><h3>Care</h3><p>How to wash and rest soft cotton and light knits so they keep their hand.</p><a class="text-link" href="#care">Care guide</a></article>
-        <article class="service-card"><span class="num">03</span><h3>Size &amp; Fit</h3><p>A simple chart and fit notes. When unsure, write us before you buy.</p><a class="text-link" href="#size">View guide</a></article>
-      </div>
-    </section>
-
-    <section class="section tight" id="service-details" aria-label="Service details" style="padding-top:0;">
-      <div class="detail-block reveal" id="shipping">
-        <div>
-          <p class="section-label">Policy</p>
-          <h2>Shipping &amp; Returns</h2>
-          <p class="lede">Transparent timing and a calm returns path—no urgency language.</p>
-        </div>
-        <div class="detail-body">
-          <h4>Shipping</h4>
-          <ul>
-            <li>Orders ship after payment clears and stock is confirmed for the drop.</li>
-            <li>Domestic and selected international destinations; tracking by email.</li>
-            <li>Estimated windows appear at checkout when the store goes live.</li>
-            <li>Duties or local taxes, if any, are the recipient’s responsibility unless stated otherwise.</li>
-          </ul>
-          <h4>Returns &amp; exchanges</h4>
-          <ul>
-            <li>Unworn pieces with original tags may be returned within 14 days of delivery.</li>
-            <li>Exchanges for size while stock lasts in the same style and colour.</li>
-            <li>Final sale items (if marked) and worn or washed garments cannot be returned.</li>
-            <li>Start a return at <a href="mailto:zhaojinxiu0525@gmail.com?subject=Return%20request">zhaojinxiu0525@gmail.com</a>.</li>
-          </ul>
-          <h4>Refunds</h4>
-          <p>Approved refunds return to the original payment method within several business days after we receive and inspect the piece.</p>
-        </div>
-      </div>
-      <div class="detail-block reveal" id="care">
-        <div>
-          <p class="section-label">Care</p>
-          <h2>Looking after softwear</h2>
-          <p class="lede">Light hands, cool water, space to rest.</p>
-        </div>
-        <div class="detail-body">
-          <h4>Cotton soft tees</h4>
-          <ul>
-            <li>Turn inside out. Machine wash cold, gentle cycle, mild detergent.</li>
-            <li>Avoid bleach and fabric softener.</li>
-            <li>Line dry flat or hang in shade; low iron on reverse if needed.</li>
-          </ul>
-          <h4>Light knits</h4>
-          <ul>
-            <li>Hand wash cool or use a knit bag on delicate. Do not wring.</li>
-            <li>Reshape while damp and dry flat away from direct heat.</li>
-            <li>Fold to store; hanging can pull fine gauges out of line.</li>
-          </ul>
-          <h4>Everyday notes</h4>
-          <p>Spot-clean when you can. Rotate wear so fibres recover. If a snag appears, do not pull—reach us for repair advice.</p>
-        </div>
-      </div>
-      <div class="detail-block reveal" id="size">
-        <div>
-          <p class="section-label">Fit</p>
-          <h2>Size &amp; Fit</h2>
-          <p class="lede">Easy, close-but-comfortable. Between sizes? Size up for a softer drape.</p>
-        </div>
-        <div class="detail-body">
-          <h4>Guide (cm) — body measurements</h4>
-          <table class="size-table">
-            <thead><tr><th>Size</th><th>Bust</th><th>Waist</th><th>Hip</th></tr></thead>
-            <tbody>
-              <tr><td>XS</td><td>80–84</td><td>62–66</td><td>86–90</td></tr>
-              <tr><td>S</td><td>84–88</td><td>66–70</td><td>90–94</td></tr>
-              <tr><td>M</td><td>88–92</td><td>70–74</td><td>94–98</td></tr>
-              <tr><td>L</td><td>92–98</td><td>74–80</td><td>98–104</td></tr>
-            </tbody>
-          </table>
-          <p class="size-note">Indicative for the first drop. Exact garment measurements on each product page. Sizing help: zhaojinxiu0525@gmail.com</p>
-          <h4>Fit notes</h4>
-          <ul>
-            <li>Soft Tee — regular through the body; shoulder sits clean.</li>
-            <li>Light Knit — lightly relaxed; intended to skim, not cling.</li>
-            <li>Fresh Cut — follows the season’s collar or sleeve experiment.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section reveal" id="private" aria-labelledby="private-title">
-      <div class="private">
-        <div>
-          <p class="eyebrow">Private Client</p>
-          <h2 id="private-title">Request a first-drop preview</h2>
-          <p>When samples and colourways are ready, we contact guests who leave details—before the public shop opens. Prefer email? Write
-            <a href="mailto:zhaojinxiu0525@gmail.com" style="border-bottom:1px solid var(--line-strong);">zhaojinxiu0525@gmail.com</a>.</p>
-          <a class="btn ghost" href="mailto:zhaojinxiu0525@gmail.com?subject=Private%20Client%20preview">Email NoY</a>
-        </div>
-        <form class="private-panel" action="mailto:zhaojinxiu0525@gmail.com" method="get" enctype="text/plain">
-          <div class="row"><label for="name">Name</label><input id="name" name="subject" autocomplete="name" placeholder="Your name" /></div>
-          <div class="row"><label for="pc-contact">Email / WeChat / Phone</label><input id="pc-contact" name="body" autocomplete="email" placeholder="Best way to reach you" /></div>
-          <div class="row"><label for="note">Note</label><textarea id="note" placeholder="Soft tee, light knit, size preference…"></textarea></div>
-          <button class="btn primary" type="submit" style="width:100%;">Request preview</button>
-          <p class="note">Opens your mail app with a draft. We never sell your details.</p>
-        </form>
-      </div>
-    </section>
-
-    <section class="contact-band reveal" id="contact" aria-labelledby="contact-title">
-      <div class="soft-img" aria-hidden="true"></div>
-      <p class="eyebrow">Contact</p>
-      <h2 id="contact-title">A quiet line to NoY</h2>
-      <p>Orders, fit questions, press, Private Client—one address. We aim to reply within two business days.</p>
-      <a class="email" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
-      <a class="phone" href="tel:+8615993986893">+86 159 9398 6893</a>
-    </section>
-  </main>
-
-  <footer>
-    <div>
-      <a class="brand" href="#top">NoY</a>
-      <p class="tagline">Women’s soft essentials. Tees &amp; knits with garden ease.</p>
-      <p class="muted-line">noywear.com</p>
-    </div>
-    <div>
-      <h4>Explore</h4>
-      <ul>
-        <li><a href="#atelier">Atelier</a></li>
-        <li><a href="#collection">Collection</a></li>
-        <li><a href="#shop">Shop</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#private">Private Client</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Client Care</h4>
-      <ul>
-        <li><a href="#shipping">Shipping &amp; Returns</a></li>
-        <li><a href="#care">Care</a></li>
-        <li><a href="#size">Size &amp; Fit</a></li>
-        <li><a href="#services">All services</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a></li>
-        <li><a href="tel:+8615993986893">15993986893</a></li>
-        <li><a href="#contact">Write to us</a></li>
-      </ul>
-    </div>
-  </footer>
-  <div class="legal">
-    <span>© <span id="y"></span> NoY. All rights reserved.</span>
-    <span>Designed for noywear.com</span>
-  </div>
-
-  <script>
+<div class="hero-actions">
+<a class="btn primary" data-i18n="hero.cta" href="#atelier">Step into the atelier</a>
+<a class="text-link" data-i18n="hero.link" href="#collection">The first edit</a>
+</div>
+</div>
+</section>
+<aside aria-label="Garden note" class="verse-band reveal" data-i18n-aria="verse.aria">
+<span aria-hidden="true" class="mark">“</span>
+<p data-i18n="verse.body">Not a lobby. A garden path—lilac, sage, cream, and time enough to choose one good thing.</p>
+<span class="cn" data-i18n="verse.cn">像走进莫奈的花园。</span>
+</aside>
+<div aria-hidden="false" class="path-bleed reveal">
+<img alt="Central path through Monet's garden at Giverny" data-i18n-alt="alt.path" height="720" loading="lazy" src="assets/path-linen.jpg" width="1280"/>
+<p class="caption" data-i18n="path.caption">Afternoon light. A path through Monet’s garden.</p>
+</div>
+<section aria-labelledby="atelier-title" class="section tight reveal" id="atelier">
+<div class="section-head">
+<div>
+<p class="section-label" data-i18n="atelier.label">Atelier · Mood</p>
+<h2 data-i18n="atelier.title" id="atelier-title">Studies in soft light</h2>
+</div>
+<p data-i18n="atelier.lead">Botanical stills, brushed colour, and cloth at rest—an editorial garden for softwear, not a product grid.</p>
+</div>
+</section>
+<div class="atelier-wrap reveal">
+<div class="atelier">
+<a aria-label="Knit study" class="tile-link" data-i18n-aria="tile.knit" href="coming-soon.html?piece=knit-garden"><figure class="tile t1"><img alt="Close-up of soft beige knit texture" data-i18n-alt="alt.knit" height="1152" loading="lazy" src="assets/mood-knit-garden.jpg" width="864"/><figcaption data-i18n="tile.knit">Knit study</figcaption></figure></a>
+<a aria-label="Lilac light" class="tile-link" data-i18n-aria="tile.lilac" href="coming-soon.html?piece=lilac"><figure class="tile t2"><img alt="Deep purple lilac with dew" data-i18n-alt="alt.lilac" height="864" loading="lazy" src="assets/mood-lilac.jpg" width="1152"/><figcaption data-i18n="tile.lilac">Lilac light</figcaption></figure></a>
+<a aria-label="Pressed garden" class="tile-link" data-i18n-aria="tile.collage" href="coming-soon.html?piece=collage"><figure class="tile t3"><img alt="Pressed flowers on handmade paper cards" data-i18n-alt="alt.collage" height="1152" loading="lazy" src="assets/collage-atelier.jpg" width="864"/><figcaption data-i18n="tile.collage">Pressed garden</figcaption></figure></a>
+<a aria-label="Spring flatlay" class="tile-link" data-i18n-aria="tile.tee" href="coming-soon.html?piece=tee-petal"><figure class="tile t4"><img alt="Spring blossoms arranged on beige paper" data-i18n-alt="alt.tee" height="1152" loading="lazy" src="assets/mood-tee-petal.jpg" width="864"/><figcaption data-i18n="tile.tee">Spring flatlay</figcaption></figure></a>
+<a aria-label="Water light" class="tile-link" data-i18n-aria="tile.lilies" href="coming-soon.html?piece=lilies"><figure class="tile t5"><img alt="Water lilies on Monet's pond at Giverny" data-i18n-alt="alt.lilies" height="864" loading="lazy" src="assets/mood-lilies.jpg" width="1152"/><figcaption data-i18n="tile.lilies">Water light</figcaption></figure></a>
+<a aria-label="Lilac on linen" class="tile-link" data-i18n-aria="tile.petal" href="coming-soon.html?piece=petal-detail"><figure class="tile t6"><img alt="Lilac branch resting on white linen" data-i18n-alt="alt.detail" height="1000" loading="lazy" src="assets/detail-petal-knit.jpg" width="1000"/><figcaption data-i18n="tile.petal">Lilac on linen</figcaption></figure></a>
+<a aria-label="Still life" class="tile-link" data-i18n-aria="tile.still" href="coming-soon.html?piece=still-life"><figure class="tile t7"><img alt="Lilac flowers beside an open book" data-i18n-alt="alt.still" height="864" loading="lazy" src="assets/still-water-tee.jpg" width="1152"/><figcaption data-i18n="tile.still">Still life</figcaption></figure></a>
+<a aria-label="Lavender path" class="tile-link" data-i18n-aria="tile.breeze" href="coming-soon.html?piece=breeze"><figure class="tile t8"><img alt="Path through a lavender field" data-i18n-alt="alt.breeze" height="720" loading="lazy" src="assets/brush-breeze.jpg" width="1280"/><figcaption data-i18n="tile.breeze">Lavender path</figcaption></figure></a>
+</div>
+</div>
+<section aria-labelledby="shop-title" class="section tight reveal" id="shop">
+<div class="section-head">
+<div>
+<p class="section-label" data-i18n="shop.label">Shop</p>
+<h2 data-i18n="shop.title" id="shop-title">Opening soon</h2>
+</div>
+<p data-i18n="shop.lead">The store arrives with the first drop. Until then, ask for a Private Client preview—no checkout on this page.</p>
+</div>
+<div class="services-grid shop-teaser">
+<article class="service-card">
+<span class="num" data-i18n="shop.online">Online</span>
+<h3>noywear.com</h3>
+<p data-i18n="shop.online.p">When samples settle, product pages will carry fabric notes, fit guidance, and soft photography—kept breezy, never loud.</p>
+<a class="text-link" data-i18n="shop.preview" href="#private">Join the preview list</a>
+</article>
+<article class="service-card">
+<span class="num" data-i18n="shop.direct">Direct</span>
+<h3 data-i18n="shop.private.h">Private Client</h3>
+<p data-i18n="shop.private.p">Early colourways, size holds, small-batch pieces. Write with your preferences; we reply personally.</p>
+<a class="text-link" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
+</article>
+</div>
+</section>
+<section aria-labelledby="collection-title" class="section reveal" id="collection">
+<div class="section-head">
+<div>
+<p class="section-label" data-i18n="col.label">Collection</p>
+<h2 data-i18n="col.title" id="collection-title">The first edit</h2>
+</div>
+<p data-i18n="col.lead">Three silhouettes to begin: soft tee, light knit, fresh cut. Small runs—hand-feel before scale.</p>
+</div>
+<div class="collection">
+<article class="look featured">
+<div class="look-media">
+<a aria-label="Soft Tee" class="look-link" data-i18n-aria="col.soft.h" href="coming-soon.html?piece=soft-tee"><img alt="Cream soft tee in warm window light" data-i18n-alt="alt.soft" height="1152" loading="lazy" src="assets/soft-tee.jpg" width="864"/></a>
+<span class="look-badge" data-i18n="col.badge1">01 · Core</span>
+</div>
+<div class="look-meta">
+<h3 data-i18n="col.soft.h">Soft Tee</h3>
+<p data-i18n="col.soft.p">Clean crew, considered necklines. Tones that sit close without clinging.</p>
+<span class="status" data-i18n="col.soft.status">Preview · Coming soon</span>
+</div>
+</article>
+<article class="look">
+<div class="look-media">
+<a aria-label="Light Knit" class="look-link" data-i18n-aria="col.light.h" href="coming-soon.html?piece=light-knit"><img alt="Close-up of fine knit fabric" data-i18n-alt="alt.light" height="1152" loading="lazy" src="assets/light-knit.jpg" width="864"/></a>
+<span class="look-badge">02</span>
+</div>
+<div class="look-meta">
+<h3 data-i18n="col.light.h">Light Knit</h3>
+<p data-i18n="col.light.p">Fine-gauge layers. Breathable, easy to stack under garden light.</p>
+<span class="status" data-i18n="col.light.status">Preview · Coming soon</span>
+</div>
+</article>
+<article class="look">
+<div class="look-media">
+<a aria-label="Fresh Cut" class="look-link" data-i18n-aria="col.fresh.h" href="coming-soon.html?piece=fresh-cut"><img alt="Fresh-cut peonies in soft light" data-i18n-alt="alt.fresh" height="1152" loading="lazy" src="assets/fresh-cut.jpg" width="864"/></a>
+<span class="look-badge">03</span>
+</div>
+<div class="look-meta">
+<h3 data-i18n="col.fresh.h">Fresh Cut</h3>
+<p data-i18n="col.fresh.p">A quiet shift in collar or proportion—still everyday, newly awake.</p>
+<span class="status" data-i18n="col.fresh.status">Preview · Coming soon</span>
+</div>
+</article>
+</div>
+</section>
+<div class="editorial reveal" id="about-band">
+<div class="editorial-visual">
+<img alt="Quiet flower study from a Monet garden" data-i18n-alt="alt.editorial" height="864" loading="lazy" src="assets/editorial.jpg" width="1152"/>
+<div aria-hidden="true" class="inset-frame"></div>
+</div>
+<div class="editorial-copy">
+<p class="eyebrow" data-i18n="about.eyebrow">About NoY</p>
+<h2 data-i18n="about.title" data-i18n-html="about.title">Maison softness.<br/>Garden ease.</h2>
+<p data-i18n="about.p1">We like clothes that feel like open air—soft tees and light knits with a painterly calm. Fewer SKUs, clearer silhouettes, fabric finished against skin.</p>
+<p data-i18n="about.p2">Luxury, for us, is leisure: time to choose well, then wear it again tomorrow.</p>
+<a class="text-link" data-i18n="about.link" href="#about">Read the manifesto</a>
+</div>
+</div>
+<section aria-labelledby="manifesto-title" class="manifesto" id="about">
+<div aria-hidden="true" class="brush-bg"></div>
+<div class="manifesto-card reveal">
+<p class="eyebrow" data-i18n="man.eyebrow">Manifesto</p>
+<blockquote data-i18n="man.title" data-i18n-html="man.title" id="manifesto-title">Fewer choices.<br/>More ease.</blockquote>
+<p data-i18n="man.p">Softwear should feel like a garden path—open, unhurried, enough. Clean cuts, quiet information, every piece able to stand alone.</p>
+<p class="cn" data-i18n="man.cn">少一点选择，多一点从容。</p>
+</div>
+</section>
+<section aria-label="Principles" data-i18n-aria="val.aria" style="padding:0;">
+<div class="values">
+<div class="value reveal"><div class="num" data-i18n="val.1.n">01 — Edited</div><h3 data-i18n="val.1.h">Edited</h3><p data-i18n="val.1.p">Small drops. Choose the right piece rather than fill a wardrobe.</p></div>
+<div class="value reveal"><div class="num" data-i18n="val.2.n">02 — Soft</div><h3 data-i18n="val.2.h">Soft</h3><p data-i18n="val.2.p">Hand-feel and drape first. Tees and knits you reach for again tomorrow.</p></div>
+<div class="value reveal"><div class="num" data-i18n="val.3.n">03 — Leisure</div><h3 data-i18n="val.3.h">Leisure</h3><p data-i18n="val.3.p">Basics with a slight shift—collar, cut, or colour—kept breezy.</p></div>
+</div>
+</section>
+<section aria-labelledby="services-title" class="section reveal" id="services">
+<div class="section-head">
+<div>
+<p class="section-label" data-i18n="svc.label">Client Services</p>
+<h2 data-i18n="svc.title" id="services-title">How we look after you</h2>
+</div>
+<p data-i18n="svc.lead">Clear policies, quiet support. Shipping, care, and fit—written short and exact.</p>
+</div>
+<div class="services-grid">
+<article class="service-card"><span class="num">01</span><h3 data-i18n="svc.1.h">Shipping &amp; Returns</h3><p data-i18n="svc.1.p">Tracked dispatch once the drop opens. Easy returns within a defined window.</p><a class="text-link" data-i18n="svc.1.a" href="#shipping">Read policy</a></article>
+<article class="service-card"><span class="num">02</span><h3 data-i18n="svc.2.h">Care</h3><p data-i18n="svc.2.p">How to wash and rest soft cotton and light knits so they keep their hand.</p><a class="text-link" data-i18n="svc.2.a" href="#care">Care guide</a></article>
+<article class="service-card"><span class="num">03</span><h3 data-i18n="svc.3.h">Size &amp; Fit</h3><p data-i18n="svc.3.p">A simple chart and fit notes. When unsure, write us before you buy.</p><a class="text-link" data-i18n="svc.3.a" href="#size">View guide</a></article>
+</div>
+</section>
+<section aria-label="Service details" class="section tight" id="service-details" style="padding-top:0;">
+<div class="detail-block reveal" id="shipping">
+<div>
+<p class="section-label" data-i18n="ship.label">Policy</p>
+<h2 data-i18n="ship.title">Shipping &amp; Returns</h2>
+<p class="lede" data-i18n="ship.lede">Transparent timing and a calm returns path—no urgency language.</p>
+</div>
+<div class="detail-body">
+<h4 data-i18n="ship.h1">Shipping</h4>
+<ul>
+<li data-i18n="ship.l1">Orders ship after payment clears and stock is confirmed for the drop.</li>
+<li data-i18n="ship.l2">Domestic and selected international destinations; tracking by email.</li>
+<li data-i18n="ship.l3">Estimated windows appear at checkout when the store goes live.</li>
+<li data-i18n="ship.l4">Duties or local taxes, if any, are the recipient’s responsibility unless stated otherwise.</li>
+</ul>
+<h4 data-i18n="ship.h2">Returns &amp; exchanges</h4>
+<ul>
+<li data-i18n="ship.r1">Unworn pieces with original tags may be returned within 14 days of delivery.</li>
+<li data-i18n="ship.r2">Exchanges for size while stock lasts in the same style and colour.</li>
+<li data-i18n="ship.r3">Final sale items (if marked) and worn or washed garments cannot be returned.</li>
+<li data-i18n="ship.r4" data-i18n-html="ship.r4">Start a return at <a href="mailto:zhaojinxiu0525@gmail.com?subject=Return%20request">zhaojinxiu0525@gmail.com</a>.</li>
+</ul>
+<h4 data-i18n="ship.h3">Refunds</h4>
+<p data-i18n="ship.refund">Approved refunds return to the original payment method within several business days after we receive and inspect the piece.</p>
+</div>
+</div>
+<div class="detail-block reveal" id="care">
+<div>
+<p class="section-label" data-i18n="care.label">Care</p>
+<h2 data-i18n="care.title">Looking after softwear</h2>
+<p class="lede" data-i18n="care.lede">Light hands, cool water, space to rest.</p>
+</div>
+<div class="detail-body">
+<h4 data-i18n="care.h1">Cotton soft tees</h4>
+<ul>
+<li data-i18n="care.t1">Turn inside out. Machine wash cold, gentle cycle, mild detergent.</li>
+<li data-i18n="care.t2">Avoid bleach and fabric softener.</li>
+<li data-i18n="care.t3">Line dry flat or hang in shade; low iron on reverse if needed.</li>
+</ul>
+<h4 data-i18n="care.h2">Light knits</h4>
+<ul>
+<li data-i18n="care.k1">Hand wash cool or use a knit bag on delicate. Do not wring.</li>
+<li data-i18n="care.k2">Reshape while damp and dry flat away from direct heat.</li>
+<li data-i18n="care.k3">Fold to store; hanging can pull fine gauges out of line.</li>
+</ul>
+<h4 data-i18n="care.h3">Everyday notes</h4>
+<p data-i18n="care.note">Spot-clean when you can. Rotate wear so fibres recover. If a snag appears, do not pull—reach us for repair advice.</p>
+</div>
+</div>
+<div class="detail-block reveal" id="size">
+<div>
+<p class="section-label" data-i18n="fit.label">Fit</p>
+<h2 data-i18n="fit.title">Size &amp; Fit</h2>
+<p class="lede" data-i18n="fit.lede">Easy, close-but-comfortable. Between sizes? Size up for a softer drape.</p>
+</div>
+<div class="detail-body">
+<h4 data-i18n="fit.h1">Guide (cm) — body measurements</h4>
+<table class="size-table">
+<thead><tr><th data-i18n="fit.th.size">Size</th><th data-i18n="fit.th.bust">Bust</th><th data-i18n="fit.th.waist">Waist</th><th data-i18n="fit.th.hip">Hip</th></tr></thead>
+<tbody>
+<tr><td>XS</td><td>80–84</td><td>62–66</td><td>86–90</td></tr>
+<tr><td>S</td><td>84–88</td><td>66–70</td><td>90–94</td></tr>
+<tr><td>M</td><td>88–92</td><td>70–74</td><td>94–98</td></tr>
+<tr><td>L</td><td>92–98</td><td>74–80</td><td>98–104</td></tr>
+</tbody>
+</table>
+<p class="size-note" data-i18n="fit.note">Indicative for the first drop. Exact garment measurements on each product page. Sizing help: zhaojinxiu0525@gmail.com</p>
+<h4 data-i18n="fit.h2">Fit notes</h4>
+<ul>
+<li data-i18n="fit.n1">Soft Tee — regular through the body; shoulder sits clean.</li>
+<li data-i18n="fit.n2">Light Knit — lightly relaxed; intended to skim, not cling.</li>
+<li data-i18n="fit.n3">Fresh Cut — follows the season’s collar or sleeve experiment.</li>
+</ul>
+</div>
+</div>
+</section>
+<section aria-labelledby="private-title" class="section reveal" id="private">
+<div class="private">
+<div><p class="eyebrow" data-i18n="priv.eyebrow">Private Client</p><h2 data-i18n="priv.title" id="private-title">Request a first-drop preview</h2><p data-i18n="priv.p" data-i18n-html="priv.p">When samples and colourways are ready, we contact guests who leave details—before the public shop opens. Prefer email? Write <a href="mailto:zhaojinxiu0525@gmail.com" style="border-bottom:1px solid var(--line-strong);">zhaojinxiu0525@gmail.com</a>.</p><a class="btn ghost" data-i18n="priv.btn" href="mailto:zhaojinxiu0525@gmail.com?subject=Private%20Client%20preview">Email NoY</a></div>
+<form action="mailto:zhaojinxiu0525@gmail.com" class="private-panel" enctype="text/plain" method="get">
+<div class="row"><label data-i18n="priv.name" for="name">Name</label><input autocomplete="name" data-i18n-placeholder="priv.name.ph" id="name" name="subject" placeholder="Your name"/></div>
+<div class="row"><label data-i18n="priv.contact" for="pc-contact">Email / WeChat / Phone</label><input autocomplete="email" data-i18n-placeholder="priv.contact.ph" id="pc-contact" name="body" placeholder="Best way to reach you"/></div>
+<div class="row"><label data-i18n="priv.note" for="note">Note</label><textarea data-i18n-placeholder="priv.note.ph" id="note" placeholder="Soft tee, light knit, size preference…"></textarea></div>
+<button class="btn primary" data-i18n="priv.submit" style="width:100%;" type="submit">Request preview</button>
+<p class="note" data-i18n="priv.formnote">Opens your mail app with a draft. We never sell your details.</p>
+</form>
+</div>
+</section>
+<section aria-labelledby="contact-title" class="contact-band reveal" id="contact">
+<div aria-hidden="true" class="soft-img"></div>
+<p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
+<h2 data-i18n="contact.title" id="contact-title">A quiet line to NoY</h2>
+<p data-i18n="contact.p">Orders, fit questions, press, Private Client—one address. We aim to reply within two business days.</p>
+<a class="email" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
+<a class="phone" href="tel:+8615993986893">+86 159 9398 6893</a>
+</section>
+</main>
+<footer>
+<div>
+<a class="brand" href="#top">NoY</a>
+<p class="tagline" data-i18n="foot.tag">Women’s soft essentials. Tees &amp; knits with garden ease.</p>
+<p class="muted-line">noywear.com</p>
+</div>
+<div>
+<h4 data-i18n="foot.explore">Explore</h4>
+<ul>
+<li><a data-i18n="nav.atelier" href="#atelier">Atelier</a></li>
+<li><a data-i18n="nav.collection" href="#collection">Collection</a></li>
+<li><a data-i18n="nav.shop" href="#shop">Shop</a></li>
+<li><a data-i18n="nav.about" href="#about">About</a></li>
+<li><a data-i18n="nav.private" href="#private">Private Client</a></li>
+</ul>
+</div>
+<div>
+<h4 data-i18n="foot.care">Client Care</h4>
+<ul>
+<li><a data-i18n="nav.shipping" href="#shipping">Shipping &amp; Returns</a></li>
+<li><a data-i18n="nav.care" href="#care">Care</a></li>
+<li><a data-i18n="nav.size" href="#size">Size &amp; Fit</a></li>
+<li><a data-i18n="foot.services" href="#services">All services</a></li>
+</ul>
+</div>
+<div>
+<h4 data-i18n="foot.contact">Contact</h4>
+<ul>
+<li><a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a></li>
+<li><a href="tel:+8615993986893">15993986893</a></li>
+<li><a data-i18n="foot.write" href="#contact">Write to us</a></li>
+</ul>
+</div>
+</footer>
+<div class="legal">
+<span>© <span id="y"></span> <span data-i18n="legal.rights">NoY. All rights reserved.</span></span>
+<span data-i18n="legal.designed">Designed for noywear.com</span>
+</div>
+<script>
     document.getElementById("y").textContent = new Date().getFullYear();
     const bar = document.getElementById("topbar");
     const toggle = document.getElementById("menu-toggle");
     const mobile = document.getElementById("mobile-nav");
     addEventListener("scroll", () => bar.classList.toggle("scrolled", scrollY > 8), { passive: true });
-    toggle.addEventListener("click", () => {
-      const open = mobile.classList.toggle("open");
+    function syncMenuLabel() {
+      const open = mobile.classList.contains("open");
+      const lang = (window.NoYI18n && (localStorage.getItem("noy-lang") || window.NoYI18n.detect())) || "en";
+      const key = open ? "nav.menuClose" : "nav.menuOpen";
+      toggle.setAttribute("aria-label", window.NoYI18n ? window.NoYI18n.t(lang, key) : (open ? "Close menu" : "Open menu"));
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+    toggle.addEventListener("click", () => {
+      mobile.classList.toggle("open");
+      syncMenuLabel();
     });
     mobile.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
       mobile.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-label", "Open menu");
+      syncMenuLabel();
     }));
     const reveals = document.querySelectorAll(".reveal");
     if ("IntersectionObserver" in window) {
@@ -1014,6 +1020,13 @@
       }, { threshold: 0.1, rootMargin: "0px 0px -36px 0px" });
       reveals.forEach((el) => io.observe(el));
     } else { reveals.forEach((el) => el.classList.add("in")); }
-  </script>
+
+    // i18n boot
+    if (window.NoYI18n) {
+      window.NoYI18n.bindSwitcher();
+      window.NoYI18n.apply(window.NoYI18n.detect());
+      document.addEventListener("noy:lang", syncMenuLabel);
+    }
+</script>
 </body>
 </html>
