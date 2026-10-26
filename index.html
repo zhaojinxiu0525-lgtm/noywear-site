@@ -3,26 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NoY — Soft Essentials</title>
-  <meta name="description" content="NoY — Women's soft tees and light knits. Quiet everyday luxury." />
-  <meta name="theme-color" content="#f7f5f1" />
+  <title>NoY — Soft Essentials in the Garden</title>
+  <meta name="description" content="NoY — Women’s soft tees and light knits. A leisurely Monet-garden mood for everyday wear." />
+  <meta name="theme-color" content="#f6f1ea" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f7f5f1;
-      --paper: #fffcf8;
-      --stone: #e6e1d8;
-      --stone-deep: #d2cbc0;
-      --ink: #1a1917;
-      --ink-soft: #2e2c29;
-      --muted: #8a847a;
-      --muted-soft: #a39c92;
-      --line: rgba(26, 25, 23, 0.10);
-      --line-strong: rgba(26, 25, 23, 0.18);
-      --accent: #8f7d6b; /* quiet taupe */
-      --accent-soft: #c4b5a5;
+      --bg: #f6f1ea;
+      --paper: #fffaf5;
+      --lilac: #c9b6d4;
+      --lilac-soft: #e8dcec;
+      --sage: #a8b89a;
+      --sage-deep: #7e9270;
+      --blush: #e8c4c0;
+      --blush-soft: #f3ddd9;
+      --cream: #f8f0e4;
+      --ink: #2a2f28;
+      --ink-soft: #3d433c;
+      --muted: #7a7f74;
+      --muted-soft: #9aa094;
+      --line: rgba(42, 47, 40, 0.10);
+      --line-strong: rgba(42, 47, 40, 0.18);
+      --accent: #9b7fa8;
+      --accent-soft: #c9b6d4;
+      --garden-deep: #4a5c48;
       --header-h: 72px;
     }
 
@@ -30,16 +36,23 @@
     html { scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .strip-track { animation: none !important; }
+      .strip-track, .petal, .shimmer, .float-leaf,
+      .reveal, .hero-visual img { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
     body {
       font-family: Inter, system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232, 220, 236, 0.55), transparent 55%),
+        radial-gradient(ellipse 70% 45% at 90% 8%, rgba(168, 184, 154, 0.28), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(243, 221, 217, 0.35), transparent 55%),
+        var(--bg);
       color: var(--ink);
       font-weight: 300;
       letter-spacing: 0.01em;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
@@ -48,7 +61,7 @@
       font: inherit; color: inherit;
     }
     :focus-visible {
-      outline: 1px solid var(--ink);
+      outline: 1px solid var(--accent);
       outline-offset: 3px;
     }
     .serif { font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif; }
@@ -59,18 +72,73 @@
       padding-right: 40px;
     }
 
+    /* —— Floating petals / leaves (CSS motion) —— */
+    .garden-sky {
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 40;
+      overflow: hidden;
+    }
+    .petal, .float-leaf {
+      position: absolute;
+      opacity: 0.55;
+      will-change: transform;
+    }
+    .petal {
+      width: 14px; height: 18px;
+      background: radial-gradient(ellipse at 30% 30%, #f3ddd9, #e8c4c0 60%, #c9b6d4);
+      border-radius: 70% 10% 70% 10%;
+      filter: blur(0.2px);
+      animation: petal-drift linear infinite;
+    }
+    .petal.lilac {
+      background: radial-gradient(ellipse at 30% 30%, #efe6f3, #c9b6d4 65%, #a88fb8);
+    }
+    .petal.cream {
+      background: radial-gradient(ellipse at 30% 30%, #fffaf5, #f3e6d4 70%, #e8c4c0);
+      opacity: 0.4;
+    }
+    .float-leaf {
+      width: 18px; height: 10px;
+      background: radial-gradient(ellipse at 40% 40%, #c5d4b5, #7e9270);
+      border-radius: 0 80% 0 80%;
+      opacity: 0.35;
+      animation: leaf-drift linear infinite;
+    }
+    @keyframes petal-drift {
+      0%   { transform: translate3d(0, -8vh, 0) rotate(0deg); opacity: 0; }
+      8%   { opacity: 0.55; }
+      92%  { opacity: 0.4; }
+      100% { transform: translate3d(12vw, 108vh, 0) rotate(360deg); opacity: 0; }
+    }
+    @keyframes leaf-drift {
+      0%   { transform: translate3d(0, -6vh, 0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.35; }
+      100% { transform: translate3d(-10vw, 110vh, 0) rotate(-280deg); opacity: 0; }
+    }
+
+    /* —— Reveal on scroll —— */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
     /* —— Header —— */
     .topbar {
       position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: rgba(247, 245, 241, 0.88);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+      background: rgba(246, 241, 234, 0.82);
       border-bottom: 1px solid transparent;
       transition: border-color .35s ease, background .35s ease;
     }
     .topbar.scrolled {
       border-bottom-color: var(--line);
-      background: rgba(247, 245, 241, 0.96);
+      background: rgba(246, 241, 234, 0.94);
     }
     .topbar-inner {
       max-width: 1440px; margin: 0 auto;
@@ -90,7 +158,7 @@
     .nav-left a, .nav-right a {
       transition: opacity .2s ease, color .2s ease;
     }
-    .nav-left a:hover, .nav-right a:hover { opacity: 0.5; }
+    .nav-left a:hover, .nav-right a:hover { opacity: 0.5; color: var(--accent); }
     .brand {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-size: 26px; font-weight: 500;
@@ -129,52 +197,56 @@
       min-height: calc(100vh - var(--header-h));
       display: grid;
       grid-template-columns: 1fr 1fr;
+      position: relative;
     }
     .hero-copy {
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 72px 56px 80px;
-      max-width: 620px;
+      max-width: 640px;
+      position: relative; z-index: 2;
     }
     .eyebrow {
       font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 28px; font-weight: 400;
+      color: var(--accent); margin-bottom: 28px; font-weight: 400;
     }
     .hero h1 {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-weight: 400;
-      font-size: clamp(52px, 7.2vw, 92px);
-      line-height: 0.94;
+      font-size: clamp(48px, 6.8vw, 86px);
+      line-height: 0.96;
       letter-spacing: -0.025em;
       margin-bottom: 28px;
+      color: var(--ink);
     }
     .hero h1 em {
-      font-style: italic; font-weight: 400; color: var(--ink-soft);
+      font-style: italic; font-weight: 400; color: var(--garden-deep);
     }
     .hero-lead {
       font-size: 15px; color: var(--muted);
-      max-width: 36ch; margin-bottom: 44px; line-height: 1.75;
+      max-width: 38ch; margin-bottom: 44px; line-height: 1.8;
     }
     .hero-actions { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 176px; height: 48px; padding: 0 28px;
-      border: 1px solid var(--ink);
+      border: 1px solid var(--garden-deep);
       font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
       font-weight: 400;
       transition: background .25s ease, color .25s ease, border-color .25s ease;
     }
-    .btn.primary { background: var(--ink); color: var(--paper); }
-    .btn.primary:hover { background: var(--ink-soft); }
-    .btn.ghost:hover { background: var(--ink); color: var(--paper); }
+    .btn.primary { background: var(--garden-deep); color: var(--paper); border-color: var(--garden-deep); }
+    .btn.primary:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
+    .btn.ghost:hover { background: var(--garden-deep); color: var(--paper); }
     .text-link {
       font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-      border-bottom: 1px solid var(--ink); padding-bottom: 4px;
+      border-bottom: 1px solid var(--accent); padding-bottom: 4px;
+      color: var(--ink-soft);
       transition: opacity .2s;
     }
     .text-link:hover { opacity: 0.55; }
     .hero-visual {
       position: relative;
-      background: var(--stone);
+      background: linear-gradient(160deg, var(--lilac-soft), var(--blush-soft) 50%, var(--cream));
       min-height: 560px;
       overflow: hidden;
     }
@@ -182,25 +254,41 @@
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover; object-position: center;
+      animation: soft- ken 18s ease-in-out infinite alternate;
+    }
+    @keyframes soft-ken {
+      from { transform: scale(1); }
+      to { transform: scale(1.045); }
+    }
+    .hero-visual .shimmer {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,250,245,0.35), transparent 40%),
+        radial-gradient(circle at 70% 70%, rgba(201,182,212,0.22), transparent 45%);
+      animation: shimmer-breathe 8s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer-breathe {
+      from { opacity: 0.55; }
+      to { opacity: 1; }
     }
     .hero-visual::after {
-      content: "NoY · Soft Essentials";
+      content: "NoY · Garden Soft";
       position: absolute; right: 36px; bottom: 28px; z-index: 2;
       font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(26, 25, 23, 0.38);
+      color: rgba(42, 47, 40, 0.42);
     }
     .hero-frame {
       position: absolute; inset: 48px;
-      border: 1px solid rgba(26, 25, 23, 0.08);
-      pointer-events: none;
+      border: 1px solid rgba(255, 250, 245, 0.45);
+      pointer-events: none; z-index: 2;
     }
     .hero-caption {
       position: absolute; left: 48px; bottom: 48px;
       font-family: "Cormorant Garamond", Georgia, serif;
       font-size: 22px; font-style: italic;
-      color: rgba(26, 25, 23, 0.55);
-      max-width: 14ch; line-height: 1.25;
-      z-index: 1;
+      color: rgba(42, 47, 40, 0.62);
+      max-width: 16ch; line-height: 1.25;
+      z-index: 2;
     }
 
     /* —— Strip —— */
@@ -210,16 +298,18 @@
       padding: 16px 0; overflow: hidden;
       font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
       color: var(--muted);
+      background: rgba(255, 250, 245, 0.45);
     }
     .strip-track {
       display: flex; gap: 52px; white-space: nowrap;
-      animation: slide 36s linear infinite;
+      animation: slide 40s linear infinite;
       width: max-content;
     }
     .strip-track span::before {
-      content: "·";
+      content: "❀";
       margin-right: 52px;
       color: var(--accent-soft);
+      font-size: 9px;
     }
     .strip-track span:first-child::before { content: none; margin: 0; }
     @keyframes slide {
@@ -247,7 +337,48 @@
     }
     .section-label {
       font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 16px;
+      color: var(--accent); margin-bottom: 16px;
+    }
+
+    /* —— Atelier / Mood gallery —— */
+    .atelier {
+      max-width: 1440px; margin: 0 auto;
+      padding: 24px 40px 96px;
+    }
+    .atelier-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 14px;
+    }
+    .atelier-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      min-height: 240px;
+    }
+    .atelier-card.tall { grid-row: span 2; min-height: 520px; }
+    .atelier-card.wide { grid-column: span 1; }
+    .atelier-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      position: absolute; inset: 0;
+      transition: transform 1.1s ease;
+    }
+    .atelier-card:hover img { transform: scale(1.04); }
+    .atelier-card figcaption {
+      position: absolute; left: 18px; bottom: 16px; z-index: 2;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic; font-size: 18px;
+      color: rgba(255,250,245,0.92);
+      text-shadow: 0 1px 8px rgba(42,47,40,0.35);
+    }
+    .atelier-card::after {
+      content: ""; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to top, rgba(42,47,40,0.28), transparent 45%);
+      pointer-events: none;
     }
 
     /* —— Collection —— */
@@ -262,13 +393,17 @@
       border: 1px solid var(--line);
       min-height: 440px;
       display: flex; flex-direction: column;
-      transition: border-color .3s ease;
+      transition: border-color .3s ease, box-shadow .3s ease;
+      border-radius: 2px;
     }
-    .look:hover { border-color: var(--line-strong); }
+    .look:hover {
+      border-color: var(--lilac);
+      box-shadow: 0 12px 40px rgba(155, 127, 168, 0.08);
+    }
     .look.featured { min-height: 660px; }
     .look-media {
       flex: 1; position: relative; overflow: hidden;
-      background: var(--stone);
+      background: var(--lilac-soft);
       min-height: 280px;
     }
     .look-media img {
@@ -280,13 +415,13 @@
     .look:hover .look-media img { transform: scale(1.03); }
     .look-media::after {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(26,25,23,0.07), transparent 42%);
+      background: linear-gradient(to top, rgba(42,47,40,0.06), transparent 42%);
       pointer-events: none;
     }
     .look-badge {
       position: absolute; top: 20px; left: 20px; z-index: 1;
       font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--muted); background: rgba(255,252,248,0.72);
+      color: var(--garden-deep); background: rgba(255,250,245,0.78);
       padding: 6px 10px; backdrop-filter: blur(6px);
     }
     .look-meta {
@@ -319,7 +454,7 @@
     }
     .editorial-visual {
       min-height: 520px;
-      background: var(--stone);
+      background: var(--sage);
       position: relative;
       overflow: hidden;
     }
@@ -331,13 +466,13 @@
     .editorial-visual::after {
       content: "";
       position: absolute; inset: 40px;
-      border: 1px solid rgba(26,25,23,0.08);
+      border: 1px solid rgba(255,250,245,0.35);
       pointer-events: none;
     }
     .editorial-copy {
       display: flex; flex-direction: column; justify-content: center;
       padding: 72px 64px;
-      background: var(--paper);
+      background: linear-gradient(180deg, var(--paper), var(--cream));
     }
     .editorial-copy h2 {
       font-family: "Cormorant Garamond", Georgia, serif;
@@ -349,15 +484,27 @@
       margin-bottom: 18px; line-height: 1.75;
     }
 
-    /* —— Manifesto —— */
+    /* —— Manifesto (soft garden night) —— */
     .manifesto {
-      background: var(--ink); color: #f3f0ea;
+      background:
+        linear-gradient(160deg, #4a5c48 0%, #5a4d62 55%, #6b5a58 100%);
+      color: #f6f1ea;
       padding: 128px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .manifesto::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("assets/mood-dappled.jpg") center/cover no-repeat;
+      opacity: 0.18; mix-blend-mode: soft-light;
+      pointer-events: none;
     }
     .manifesto-inner {
       max-width: 880px; margin: 0 auto; text-align: center;
+      position: relative; z-index: 1;
     }
-    .manifesto .eyebrow { color: rgba(243,240,234,0.5); }
+    .manifesto .eyebrow { color: rgba(246,241,234,0.55); }
     .manifesto blockquote {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-size: clamp(34px, 5.2vw, 58px);
@@ -367,19 +514,20 @@
       max-width: 18ch;
     }
     .manifesto p {
-      color: rgba(243,240,234,0.58);
+      color: rgba(246,241,234,0.62);
       font-size: 14px; max-width: 46ch; margin: 0 auto 36px; line-height: 1.75;
     }
     .manifesto .cn {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-style: italic; font-size: 18px;
-      color: rgba(243,240,234,0.45); letter-spacing: 0.04em;
+      color: rgba(246,241,234,0.48); letter-spacing: 0.04em;
     }
 
     /* —— Values —— */
     .values {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      background: rgba(255,250,245,0.5);
     }
     .value {
       padding: 52px 40px;
@@ -387,7 +535,7 @@
     }
     .value:last-child { border-right: 0; }
     .value .num {
-      font-size: 10px; letter-spacing: 0.24em; color: var(--muted);
+      font-size: 10px; letter-spacing: 0.24em; color: var(--accent);
       margin-bottom: 28px; text-transform: uppercase;
     }
     .value h3 {
@@ -407,9 +555,13 @@
       border: 1px solid var(--line);
       padding: 40px 36px 44px;
       display: flex; flex-direction: column; min-height: 280px;
-      transition: border-color .3s;
+      transition: border-color .3s, box-shadow .3s;
+      border-radius: 2px;
     }
-    .service-card:hover { border-color: var(--line-strong); }
+    .service-card:hover {
+      border-color: var(--sage);
+      box-shadow: 0 10px 32px rgba(126, 146, 112, 0.1);
+    }
     .service-card .num {
       font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
       color: var(--accent); margin-bottom: 28px;
@@ -425,7 +577,7 @@
       margin-top: 28px; align-self: flex-start;
     }
 
-    /* —— Detail blocks (Care / Size / Shipping expanded) —— */
+    /* —— Detail blocks —— */
     .detail-block {
       display: grid; grid-template-columns: 0.9fr 1.1fr;
       gap: 64px; align-items: start;
@@ -451,9 +603,10 @@
     }
     .detail-body ul { list-style: none; display: grid; gap: 10px; }
     .detail-body li::before {
-      content: "—";
+      content: "❀";
       color: var(--accent-soft);
       margin-right: 10px;
+      font-size: 9px;
     }
     .size-table {
       width: 100%; border-collapse: collapse; margin-top: 8px;
@@ -489,6 +642,8 @@
     .private-panel {
       background: var(--paper); border: 1px solid var(--line);
       padding: 44px;
+      border-radius: 2px;
+      box-shadow: 0 8px 40px rgba(201, 182, 212, 0.12);
     }
     .private-panel label {
       display: block; font-size: 10px; letter-spacing: 0.2em;
@@ -502,7 +657,7 @@
       transition: border-color .2s;
     }
     .private-panel input:focus, .private-panel textarea:focus {
-      border-bottom-color: var(--ink);
+      border-bottom-color: var(--accent);
     }
     .private-panel textarea { resize: vertical; min-height: 80px; }
     .private-panel .note {
@@ -512,7 +667,8 @@
 
     /* —— Contact band —— */
     .contact-band {
-      background: var(--stone);
+      background:
+        linear-gradient(120deg, rgba(232,220,236,0.65), rgba(168,184,154,0.35), rgba(243,221,217,0.55));
       padding: 88px 40px;
       text-align: center;
     }
@@ -567,7 +723,7 @@
     footer li a, footer .muted-line {
       font-size: 13px; color: var(--muted); transition: color .2s;
     }
-    footer li a:hover { color: var(--ink); }
+    footer li a:hover { color: var(--accent); }
     .legal {
       max-width: 1440px; margin: 0 auto;
       padding: 0 40px 40px;
@@ -575,23 +731,23 @@
       font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
     }
 
-    /* —— Skip link —— */
     .skip {
       position: absolute; left: -9999px; top: 8px; z-index: 100;
-      background: var(--ink); color: var(--paper);
+      background: var(--garden-deep); color: var(--paper);
       padding: 10px 16px; font-size: 12px;
     }
     .skip:focus { left: 8px; }
 
-    /* —— Responsive —— */
     @media (max-width: 1100px) {
       .collection { grid-template-columns: 1fr 1fr; }
       .look.featured { grid-column: 1 / -1; min-height: 520px; }
+      .atelier-grid { grid-template-columns: 1fr 1fr; }
+      .atelier-card.tall { grid-row: span 1; min-height: 360px; }
       footer { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 980px) {
       :root { --header-h: 64px; }
-      .wrap, .topbar-inner, .section, .manifesto, .contact-band, footer, .legal {
+      .wrap, .topbar-inner, .section, .manifesto, .contact-band, footer, .legal, .atelier {
         padding-left: 20px; padding-right: 20px;
       }
       .topbar-inner { padding: 0 20px; }
@@ -605,6 +761,9 @@
       .hero-frame { inset: 24px; }
       .hero-caption { left: 24px; bottom: 24px; font-size: 18px; }
       .section { padding: 72px 20px; }
+      .atelier { padding: 12px 20px 64px; }
+      .atelier-grid { grid-template-columns: 1fr; }
+      .atelier-card, .atelier-card.tall { min-height: 280px; }
       .collection { grid-template-columns: 1fr; }
       .look.featured { min-height: 480px; }
       .editorial { grid-template-columns: 1fr; }
@@ -622,22 +781,35 @@
       .manifesto { padding: 88px 20px; }
       .contact-band { padding: 64px 20px; }
       .mobile-nav { padding-left: 20px; padding-right: 20px; }
+      .garden-sky { display: none; }
     }
   </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
+  <!-- Gentle drifting petals / leaves -->
+  <div class="garden-sky" aria-hidden="true">
+    <span class="petal" style="left:8%; animation-duration:22s; animation-delay:0s;"></span>
+    <span class="petal lilac" style="left:22%; animation-duration:28s; animation-delay:4s; width:11px;height:14px;"></span>
+    <span class="petal cream" style="left:38%; animation-duration:26s; animation-delay:9s;"></span>
+    <span class="float-leaf" style="left:55%; animation-duration:30s; animation-delay:2s;"></span>
+    <span class="petal lilac" style="left:68%; animation-duration:24s; animation-delay:7s; width:12px;height:16px;"></span>
+    <span class="petal" style="left:82%; animation-duration:32s; animation-delay:1s;"></span>
+    <span class="float-leaf" style="left:15%; animation-duration:34s; animation-delay:11s;"></span>
+    <span class="petal cream" style="left:48%; animation-duration:27s; animation-delay:14s; width:10px;height:13px;"></span>
+  </div>
+
   <header class="topbar" id="topbar">
     <div class="topbar-inner">
       <nav class="nav-left" aria-label="Primary">
         <a href="#shop">Shop</a>
+        <a href="#atelier">Atelier</a>
         <a href="#collection">Collection</a>
-        <a href="#about">About</a>
       </nav>
       <a class="brand" href="#top" id="top">NoY</a>
       <nav class="nav-right" aria-label="Secondary">
-        <a href="#care">Care</a>
+        <a href="#about">About</a>
         <a href="#private">Private Client</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -647,6 +819,7 @@
     </div>
     <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
       <a href="#shop">Shop</a>
+      <a href="#atelier">Atelier</a>
       <a href="#collection">Collection</a>
       <a href="#about">About</a>
       <a href="#services">Services</a>
@@ -660,39 +833,82 @@
 
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow">Women’s Soft Essentials · First Drop</p>
-        <h1 id="hero-title">Quiet cloth.<br /><em>Clear form.</em></h1>
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Women’s Soft Essentials · Garden Drop</p>
+        <h1 id="hero-title">Soft light.<br /><em>Easy cloth.</em></h1>
         <p class="hero-lead">
-          NoY makes soft tees and light knits for everyday wear—
-          edited, tactile, and newly considered. Few pieces. Precise cuts.
-          A quieter kind of newness.
+          NoY makes soft tees and light knits for unhurried days—
+          the kind of pieces you reach for when the light is gentle
+          and nothing needs to be loud.
         </p>
         <div class="hero-actions">
-          <a class="btn primary" href="#collection">View the collection</a>
-          <a class="text-link" href="#private">Request a preview</a>
+          <a class="btn primary" href="#atelier">Wander the mood</a>
+          <a class="text-link" href="#collection">View the collection</a>
         </div>
       </div>
       <div class="hero-visual">
-        <img src="assets/hero.jpg" alt="Folded soft cream tee on warm linen — NoY Soft Essentials" width="864" height="1152" loading="eager" />
+        <img src="assets/hero.jpg" alt="Cream soft tee among lilac petals in dappled garden light — NoY" width="864" height="1152" loading="eager" />
+        <div class="shimmer" aria-hidden="true"></div>
         <div class="hero-frame"></div>
-        <p class="hero-caption">Soft tee, light knit— enough.</p>
+        <p class="hero-caption">Like walking into a garden—unhurried.</p>
       </div>
     </section>
 
     <div class="strip" aria-hidden="true">
       <div class="strip-track">
-        <span>Soft Tee</span><span>Light Knit</span><span>Fresh Cut</span>
-        <span>Everyday Newness</span><span>Small Drop</span><span>NoY</span>
-        <span>Quiet Luxury</span><span>Edited Wardrobe</span>
-        <span>Soft Tee</span><span>Light Knit</span><span>Fresh Cut</span>
-        <span>Everyday Newness</span><span>Small Drop</span><span>NoY</span>
-        <span>Quiet Luxury</span><span>Edited Wardrobe</span>
+        <span>Soft Tee</span><span>Light Knit</span><span>Garden Light</span>
+        <span>Lilac &amp; Sage</span><span>Leisure Days</span><span>NoY</span>
+        <span>Fresh Cut</span><span>Breezy Softwear</span>
+        <span>Soft Tee</span><span>Light Knit</span><span>Garden Light</span>
+        <span>Lilac &amp; Sage</span><span>Leisure Days</span><span>NoY</span>
+        <span>Fresh Cut</span><span>Breezy Softwear</span>
+      </div>
+    </div>
+
+    <!-- Atelier / Mood gallery -->
+    <section class="section tight reveal" id="atelier" aria-labelledby="atelier-title">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Atelier · Mood</p>
+          <h2 id="atelier-title">A little garden on the page</h2>
+        </div>
+        <p>
+          Painterly stills and botanical softwear studies—lilac, sage, blush, cream.
+          Not a lobby. More like late afternoon among the flowers.
+        </p>
+      </div>
+    </section>
+    <div class="atelier reveal">
+      <div class="atelier-grid">
+        <figure class="atelier-card tall">
+          <img src="assets/mood-knit-garden.jpg" alt="Light knit draped on a garden chair with cream roses and moss" width="864" height="1152" loading="lazy" />
+          <figcaption>Light knit, garden chair</figcaption>
+        </figure>
+        <figure class="atelier-card">
+          <img src="assets/mood-lilac.jpg" alt="Botanical mood board with lilac, peony, and sage swatches" width="1152" height="864" loading="lazy" />
+          <figcaption>Lilac board</figcaption>
+        </figure>
+        <figure class="atelier-card">
+          <img src="assets/mood-lilies.jpg" alt="Impressionist water lilies in blush and sage" width="1152" height="864" loading="lazy" />
+          <figcaption>Water light</figcaption>
+        </figure>
+        <figure class="atelier-card">
+          <img src="assets/mood-tee-petal.jpg" alt="Cream soft tee with blush rose and sage ribbon" width="864" height="1152" loading="lazy" />
+          <figcaption>Tee &amp; petal</figcaption>
+        </figure>
+        <figure class="atelier-card">
+          <img src="assets/mood-dappled.jpg" alt="Abstract dappled garden light in lilac and sage" width="1280" height="720" loading="lazy" />
+          <figcaption>Dappled air</figcaption>
+        </figure>
+        <figure class="atelier-card">
+          <img src="assets/hero-garden.jpg" alt="Folded cream tee among lilac blossoms" width="864" height="1152" loading="lazy" />
+          <figcaption>Petal soft</figcaption>
+        </figure>
       </div>
     </div>
 
     <!-- Shop teaser -->
-    <section class="section tight" id="shop" aria-labelledby="shop-title">
+    <section class="section tight reveal" id="shop" aria-labelledby="shop-title">
       <div class="section-head">
         <div>
           <p class="section-label">Shop</p>
@@ -707,7 +923,7 @@
         <article class="service-card">
           <span class="num">Online</span>
           <h3>noywear.com</h3>
-          <p>Full shop experience arrives with sample confirmation. Product pages will carry fabric notes, fit guidance, and quiet photography—nothing loud.</p>
+          <p>Full shop experience arrives with sample confirmation. Soft photography, fabric notes, fit guidance—kept breezy, never loud.</p>
           <a class="text-link" href="#private">Join the preview list</a>
         </article>
         <article class="service-card">
@@ -719,7 +935,7 @@
       </div>
     </section>
 
-    <section class="section" id="collection" aria-labelledby="collection-title">
+    <section class="section reveal" id="collection" aria-labelledby="collection-title">
       <div class="section-head">
         <div>
           <p class="section-label">Collection</p>
@@ -776,59 +992,58 @@
       </div>
     </section>
 
-    <div class="editorial" id="about-band">
+    <div class="editorial reveal" id="about-band">
       <div class="editorial-visual">
         <img src="assets/editorial.jpg" alt="Fine-gauge light knit draped in a quiet interior — NoY" width="1152" height="864" loading="lazy" />
       </div>
       <div class="editorial-copy">
         <p class="eyebrow">About NoY</p>
-        <h2>Maison energy.<br />Approachable start.</h2>
+        <h2>Maison softness.<br />Garden ease.</h2>
         <p>
-          Luxury, for us, is restraint: fewer SKUs, clearer silhouettes, fabric that feels
-          finished against skin. NoY borrows the calm of quiet maisons—without the noise.
+          We like clothes that feel like open air—soft tees and light knits with
+          a painterly calm. Fewer SKUs, clearer silhouettes, fabric finished against skin.
         </p>
         <p>
-          We begin with women’s soft tees and light knits. Low-cost production, high care
-          for pattern and finish. Sell-through first; then return for more.
+          Luxury, for us, is leisure: the time to choose well, then wear it again tomorrow.
+          Low-cost production, high care for pattern and finish.
         </p>
         <a class="text-link" href="#about">Read the manifesto</a>
       </div>
     </div>
 
     <section class="manifesto" id="about" aria-labelledby="manifesto-title">
-      <div class="manifesto-inner">
+      <div class="manifesto-inner reveal">
         <p class="eyebrow">Manifesto</p>
-        <blockquote id="manifesto-title">Fewer choices.<br />More certainty.</blockquote>
+        <blockquote id="manifesto-title">Fewer choices.<br />More ease.</blockquote>
         <p>
-          Big-house presence is not volume—it is composure. Clean cuts, quiet information,
-          every piece able to stand alone. NoY holds the same standard for everyday softwear.
+          Softwear should feel like a garden path—open, unhurried, enough.
+          Clean cuts, quiet information, every piece able to stand alone.
         </p>
-        <p class="cn">少一点选择，多一点确定。</p>
+        <p class="cn">少一点选择，多一点从容。</p>
       </div>
     </section>
 
     <section class="section" style="padding-top:0;padding-bottom:0;" aria-label="Principles">
       <div class="values">
-        <div class="value">
+        <div class="value reveal">
           <div class="num">01 — Edited</div>
           <h3>Edited</h3>
           <p>Small drops. Choose the right piece rather than fill a wardrobe.</p>
         </div>
-        <div class="value">
+        <div class="value reveal">
           <div class="num">02 — Soft</div>
           <h3>Soft</h3>
           <p>Hand-feel and drape first. Tees and knits you reach for again tomorrow.</p>
         </div>
-        <div class="value">
-          <div class="num">03 — New</div>
-          <h3>New</h3>
-          <p>Basics with a slight shift—collar, cut, or colour—kept understated.</p>
+        <div class="value reveal">
+          <div class="num">03 — Leisure</div>
+          <h3>Leisure</h3>
+          <p>Basics with a slight shift—collar, cut, or colour—kept breezy and understated.</p>
         </div>
       </div>
     </section>
 
-    <!-- Service entry points -->
-    <section class="section" id="services" aria-labelledby="services-title">
+    <section class="section reveal" id="services" aria-labelledby="services-title">
       <div class="section-head">
         <div>
           <p class="section-label">Client Services</p>
@@ -862,7 +1077,7 @@
     </section>
 
     <section class="section tight" id="service-details" aria-label="Service details" style="padding-top:0;">
-      <div class="detail-block" id="shipping">
+      <div class="detail-block reveal" id="shipping">
         <div>
           <p class="section-label">Policy</p>
           <h2>Shipping &amp; Returns</h2>
@@ -888,7 +1103,7 @@
         </div>
       </div>
 
-      <div class="detail-block" id="care">
+      <div class="detail-block reveal" id="care">
         <div>
           <p class="section-label">Care</p>
           <h2>Looking after softwear</h2>
@@ -912,7 +1127,7 @@
         </div>
       </div>
 
-      <div class="detail-block" id="size">
+      <div class="detail-block reveal" id="size">
         <div>
           <p class="section-label">Fit</p>
           <h2>Size &amp; Fit</h2>
@@ -947,7 +1162,7 @@
       </div>
     </section>
 
-    <section class="section" id="private" aria-labelledby="private-title">
+    <section class="section reveal" id="private" aria-labelledby="private-title">
       <div class="private">
         <div>
           <p class="eyebrow">Private Client</p>
@@ -978,7 +1193,7 @@
       </div>
     </section>
 
-    <section class="contact-band" id="contact" aria-labelledby="contact-title">
+    <section class="contact-band reveal" id="contact" aria-labelledby="contact-title">
       <p class="eyebrow">Contact</p>
       <h2 id="contact-title">A quiet line to NoY</h2>
       <p>Orders, fit questions, press, and Private Client—one address. We aim to reply within two business days.</p>
@@ -990,13 +1205,14 @@
   <footer>
     <div>
       <a class="brand" href="#top">NoY</a>
-      <p class="tagline">Women’s soft essentials. Tees &amp; knits with quiet newness.</p>
+      <p class="tagline">Women’s soft essentials. Tees &amp; knits with garden ease.</p>
       <p class="muted-line">noywear.com</p>
     </div>
     <div>
       <h4>Explore</h4>
       <ul>
         <li><a href="#shop">Shop</a></li>
+        <li><a href="#atelier">Atelier</a></li>
         <li><a href="#collection">Collection</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#private">Private Client</a></li>
@@ -1048,6 +1264,22 @@
         toggle.setAttribute("aria-label", "Open menu");
       });
     });
+
+    // Gentle reveal-on-scroll
+    const reveals = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      reveals.forEach((el) => io.observe(el));
+    } else {
+      reveals.forEach((el) => el.classList.add("in"));
+    }
   </script>
 </body>
 </html>
