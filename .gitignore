@@ -1,0 +1,5 @@
+.DS_Store
+.firecrawl/
+DESIGN.md
+*.md
+!README.md

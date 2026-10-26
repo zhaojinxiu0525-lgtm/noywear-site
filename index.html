@@ -178,16 +178,14 @@
       min-height: 560px;
       overflow: hidden;
     }
-    .hero-visual::before {
-      content: ""; position: absolute; inset: 0;
-      background:
-        linear-gradient(165deg, rgba(255,252,248,0.45), transparent 42%),
-        radial-gradient(ellipse at 68% 28%, #ddd4c8 0%, transparent 55%),
-        linear-gradient(200deg, #ebe4da 0%, #cfc5b8 50%, #b8aea2 100%);
+    .hero-visual img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
     }
     .hero-visual::after {
       content: "NoY · Soft Essentials";
-      position: absolute; right: 36px; bottom: 28px;
+      position: absolute; right: 36px; bottom: 28px; z-index: 2;
       font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
       color: rgba(26, 25, 23, 0.38);
     }
@@ -270,17 +268,20 @@
     .look.featured { min-height: 660px; }
     .look-media {
       flex: 1; position: relative; overflow: hidden;
-      background: linear-gradient(168deg, #efeae3, #d5cdc2);
+      background: var(--stone);
+      min-height: 280px;
     }
-    .look:nth-child(2) .look-media {
-      background: linear-gradient(168deg, #e9eef1, #c2ccd4);
+    .look-media img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      transition: transform .6s ease;
     }
-    .look:nth-child(3) .look-media {
-      background: linear-gradient(168deg, #f2e9e4, #d6bfb4);
-    }
+    .look:hover .look-media img { transform: scale(1.03); }
     .look-media::after {
       content: ""; position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(26,25,23,0.07), transparent 42%);
+      pointer-events: none;
     }
     .look-badge {
       position: absolute; top: 20px; left: 20px; z-index: 1;
@@ -318,15 +319,20 @@
     }
     .editorial-visual {
       min-height: 520px;
-      background:
-        radial-gradient(ellipse at 40% 40%, #ddd5c9 0%, transparent 60%),
-        linear-gradient(145deg, #ebe5db, #b9aea2);
+      background: var(--stone);
       position: relative;
+      overflow: hidden;
+    }
+    .editorial-visual img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
     }
     .editorial-visual::after {
       content: "";
       position: absolute; inset: 40px;
       border: 1px solid rgba(26,25,23,0.08);
+      pointer-events: none;
     }
     .editorial-copy {
       display: flex; flex-direction: column; justify-content: center;
@@ -527,6 +533,15 @@
       transition: opacity .2s;
     }
     .contact-band a.email:hover { opacity: 0.55; }
+    .contact-band a.phone {
+      display: block;
+      margin-top: 18px;
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      transition: opacity .2s;
+    }
+    .contact-band a.phone:hover { opacity: 0.55; }
 
     /* —— Footer —— */
     footer {
@@ -658,7 +673,8 @@
           <a class="text-link" href="#private">Request a preview</a>
         </div>
       </div>
-      <div class="hero-visual" role="img" aria-label="Editorial soft gradient — NoY first drop">
+      <div class="hero-visual">
+        <img src="assets/hero.jpg" alt="Folded soft cream tee on warm linen — NoY Soft Essentials" width="864" height="1152" loading="eager" />
         <div class="hero-frame"></div>
         <p class="hero-caption">Soft tee, light knit— enough.</p>
       </div>
@@ -698,7 +714,7 @@
           <span class="num">Direct</span>
           <h3>Private Client</h3>
           <p>Early access to colourways, size holds, and small-batch pieces. Write to us with your preferences; we reply personally.</p>
-          <a class="text-link" href="mailto:hello@noywear.com">hello@noywear.com</a>
+          <a class="text-link" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
         </article>
       </div>
     </section>
@@ -717,6 +733,7 @@
       <div class="collection">
         <article class="look featured">
           <div class="look-media">
+            <img src="assets/soft-tee.jpg" alt="NoY Soft Tee in warm oatmeal, flat lay" width="864" height="1152" loading="lazy" />
             <span class="look-badge">01 · Core</span>
           </div>
           <div class="look-meta">
@@ -730,6 +747,7 @@
         </article>
         <article class="look">
           <div class="look-media">
+            <img src="assets/light-knit.jpg" alt="NoY Light Knit in soft taupe, flat lay" width="864" height="1152" loading="lazy" />
             <span class="look-badge">02</span>
           </div>
           <div class="look-meta">
@@ -743,6 +761,7 @@
         </article>
         <article class="look">
           <div class="look-media">
+            <img src="assets/fresh-cut.jpg" alt="NoY Fresh Cut knit folded on linen with fine gold detail" width="864" height="1152" loading="lazy" />
             <span class="look-badge">03</span>
           </div>
           <div class="look-meta">
@@ -758,7 +777,9 @@
     </section>
 
     <div class="editorial" id="about-band">
-      <div class="editorial-visual" role="img" aria-label="Warm stone editorial panel"></div>
+      <div class="editorial-visual">
+        <img src="assets/editorial.jpg" alt="Fine-gauge light knit draped in a quiet interior — NoY" width="1152" height="864" loading="lazy" />
+      </div>
       <div class="editorial-copy">
         <p class="eyebrow">About NoY</p>
         <h2>Maison energy.<br />Approachable start.</h2>
@@ -860,7 +881,7 @@
             <li>Unworn pieces with original tags may be returned within 14 days of delivery.</li>
             <li>Exchanges for size are offered while stock lasts in the same style and colour.</li>
             <li>Final sale items (if marked) and worn or washed garments cannot be returned.</li>
-            <li>Start a return at <a href="mailto:hello@noywear.com?subject=Return%20request">hello@noywear.com</a>—we reply with a label or drop-off instruction.</li>
+            <li>Start a return at <a href="mailto:zhaojinxiu0525@gmail.com?subject=Return%20request">zhaojinxiu0525@gmail.com</a>—we reply with a label or drop-off instruction.</li>
           </ul>
           <h4>Refunds</h4>
           <p>Approved refunds return to the original payment method within several business days after we receive and inspect the piece.</p>
@@ -915,7 +936,7 @@
               <tr><td>L</td><td>92–98</td><td>74–80</td><td>98–104</td></tr>
             </tbody>
           </table>
-          <p class="size-note">Chart is indicative for the first drop. Exact garment measurements will appear on each product page. For Private Client sizing help: hello@noywear.com</p>
+          <p class="size-note">Chart is indicative for the first drop. Exact garment measurements will appear on each product page. For Private Client sizing help: zhaojinxiu0525@gmail.com</p>
           <h4>Fit notes</h4>
           <ul>
             <li>Soft Tee — regular through the body; shoulder sits clean.</li>
@@ -934,11 +955,11 @@
           <p>
             When samples and colourways are ready, we contact guests who leave details—
             before the public shop opens. Prefer email? Write directly to
-            <a href="mailto:hello@noywear.com" style="border-bottom:1px solid var(--line-strong);">hello@noywear.com</a>.
+            <a href="mailto:zhaojinxiu0525@gmail.com" style="border-bottom:1px solid var(--line-strong);">zhaojinxiu0525@gmail.com</a>.
           </p>
-          <a class="btn ghost" href="mailto:hello@noywear.com?subject=Private%20Client%20preview">Email NoY</a>
+          <a class="btn ghost" href="mailto:zhaojinxiu0525@gmail.com?subject=Private%20Client%20preview">Email NoY</a>
         </div>
-        <form class="private-panel" action="mailto:hello@noywear.com" method="get" enctype="text/plain">
+        <form class="private-panel" action="mailto:zhaojinxiu0525@gmail.com" method="get" enctype="text/plain">
           <div class="row">
             <label for="name">Name</label>
             <input id="name" name="subject" autocomplete="name" placeholder="Your name" />
@@ -961,7 +982,8 @@
       <p class="eyebrow">Contact</p>
       <h2 id="contact-title">A quiet line to NoY</h2>
       <p>Orders, fit questions, press, and Private Client—one address. We aim to reply within two business days.</p>
-      <a class="email" href="mailto:hello@noywear.com">hello@noywear.com</a>
+      <a class="email" href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
+      <a class="phone" href="tel:+8615993986893">+86 159 9398 6893</a>
     </section>
   </main>
 
@@ -992,7 +1014,8 @@
     <div>
       <h4>Contact</h4>
       <ul>
-        <li><a href="mailto:hello@noywear.com">hello@noywear.com</a></li>
+        <li><a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a></li>
+        <li><a href="tel:+8615993986893">15993986893</a></li>
         <li><a href="#contact">Write to us</a></li>
       </ul>
     </div>
