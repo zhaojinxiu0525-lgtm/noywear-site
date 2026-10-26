@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NoY — Garden Studio</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <meta name="description" content="Doodle and place soft silhouettes in NoY’s garden studio. A page for inspiration, not for orders." data-i18n="gs.desc" />
+  <meta name="description" content="Draw on garden paper, keep your pieces, and hang them on the garden wall. Play — not an order." data-i18n="gs.desc" />
   <meta name="theme-color" content="#f4eee6" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -99,13 +99,16 @@
     .lead, .note, .hint { color: var(--muted); font-size: 14px; line-height: 1.75; }
     .lead { margin-bottom: 16px; }
     .note { margin-bottom: 22px; }
-    .mail {
-      display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+    .hang-cta {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
       border: 1px solid var(--garden); background: var(--garden); color: var(--paper);
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
     }
-    .mail:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
+    .hang-cta:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
     .hint { margin-top: 12px; font-size: 12px; }
+    .jumps { margin-top: 14px; font-size: 13px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .jumps a { border-bottom: 1px solid var(--line-strong); }
+    .jumps a:hover { color: var(--accent); }
     .fine { margin-top: 28px; font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
     .fine a { border-bottom: 1px solid var(--line-strong); }
     .fine a:hover { color: var(--accent); }
@@ -170,6 +173,78 @@
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
+    .gallery {
+      max-width: 1180px; margin: 0 auto; padding: 8px 28px 36px;
+    }
+    .gallery h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 400; font-size: clamp(32px, 4vw, 44px);
+      letter-spacing: -0.02em; line-height: 1.08; margin-bottom: 8px;
+    }
+    .gallery .lead { max-width: 46ch; }
+    .wall-note, .mine-note, .wall-status { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .piece-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .piece-grid .empty-line { grid-column: 1 / -1; margin-top: 0; }
+    .piece-card {
+      background: rgba(255,250,244,0.78);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 8px 8px 12px;
+    }
+    .piece-card img, .piece-fallback {
+      width: 100%; aspect-ratio: 5 / 4; object-fit: cover;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(233,223,239,0.7), transparent 46%),
+        radial-gradient(circle at 84% 80%, rgba(159,175,144,0.28), transparent 42%),
+        #f6efe6;
+      display: block;
+    }
+    .piece-card h3 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500; font-size: 22px; line-height: 1.2;
+      margin: 10px 6px 0; overflow-wrap: anywhere;
+    }
+    .piece-meta { margin: 2px 6px 0; font-size: 12px; color: var(--muted); }
+    .piece-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 6px 0; }
+    .empty-line {
+      margin-top: 14px;
+      color: var(--garden);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-style: italic; font-size: 22px; line-height: 1.35;
+    }
+    .sheet {
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 28px 26px 22px;
+      max-width: 440px;
+      width: calc(100% - 28px);
+      border-radius: 3px;
+      box-shadow: 0 24px 60px rgba(44,50,44,0.16);
+    }
+    .sheet::backdrop { background: rgba(44,50,44,0.28); }
+    .sheet h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 400; font-size: 32px; line-height: 1.1; margin: 4px 0 8px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+    .field span {
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+    }
+    .field input {
+      min-height: 44px; padding: 8px 12px; width: 100%;
+      border: 1px solid var(--line-strong); background: #fffaf4;
+      font-size: 16px; border-radius: 2px;
+    }
+    .sheet-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .sheet-actions .text-btn { display: inline-flex; align-items: center; justify-content: center; }
+    .sheet .hint { margin-top: 0; }
+    .hang-status { min-height: 1.2em; margin-top: 10px; color: var(--muted); font-size: 13px; }
     noscript p { margin-top: 12px; color: var(--muted); font-size: 14px; }
     @media (max-width: 860px) {
       .top { padding: 16px 16px 4px; }
@@ -184,7 +259,10 @@
       .copy-intro { order: 1; }
       .copy-more { order: 3; }
       .board { height: min(58vh, 480px); min-height: 280px; }
-      .mail { width: 100%; justify-content: center; }
+      .hang-cta { width: 100%; }
+      .gallery { padding: 4px 16px 28px; }
+      .sheet { padding: 22px 16px 16px; }
+      .sheet-actions .text-btn { flex: 1 1 auto; justify-content: center; }
       input[type="range"] { width: 108px; }
       .lead { margin-bottom: 0; }
     }
@@ -205,11 +283,12 @@
     </div>
   </header>
 
-  <main class="layout" id="studio">
+  <main id="studio">
+  <div class="layout">
     <div class="copy-intro">
       <p class="kicker" data-i18n="gs.kicker">Garden Studio</p>
-      <h1 data-i18n="gs.title">Doodle and mix. Leave the inspiration with NoY.</h1>
-      <p class="lead" data-i18n="gs.lead">A sheet of garden paper. Draw freely, or lightly mix a few silhouettes — tee, knit, sprig. Colour and placement, for play. This is not an order.</p>
+      <h1 data-i18n="gs.title">Make a piece. Hang it in the garden.</h1>
+      <p class="lead" data-i18n="gs.lead">Garden paper and a few soft silhouettes — tee, knit, sprig. When it feels like yours, hang it, and open it again whenever you return.</p>
     </div>
 
     <div class="stage">
@@ -250,7 +329,8 @@
           <button type="button" class="text-btn" id="stamp-remove" data-i18n="gs.remove" aria-keyshortcuts="Delete" disabled>Remove stamp</button>
           <button type="button" class="text-btn" id="undo" data-i18n="gs.undo" aria-keyshortcuts="Control+Z Meta+Z" disabled>Undo</button>
           <button type="button" class="text-btn" id="clear" data-i18n="gs.clear">Clear</button>
-          <button type="button" class="text-btn primary" id="download" data-i18n="gs.download">Download PNG</button>
+          <button type="button" class="text-btn primary" id="hang" data-i18n="gs.hang">Hang my piece</button>
+          <button type="button" class="text-btn" id="download" data-i18n="gs.download">Download PNG</button>
         </div>
       </div>
 
@@ -261,17 +341,60 @@
       <div id="live" class="sr" aria-live="polite"></div>
     </div>
     <div class="copy-more">
-      <p class="note" data-i18n="gs.note">For fun, and to share a mood with NoY. Not a product order, a size hold, or checkout. Download a PNG if you’d like to send it along.</p>
-      <a class="mail" id="mail-link" href="mailto:zhaojinxiu0525@gmail.com?subject=NoY%20garden%20inspiration" data-i18n="gs.mail">Email this inspiration</a>
-      <p class="hint" data-i18n="gs.mailhint">Your mail app opens a draft. Attach the PNG you downloaded — this page cannot upload a file.</p>
+      <p class="note" data-i18n="gs.note">The piece stays yours. Not a product order, a size hold, or checkout.</p>
+      <button type="button" class="hang-cta" id="hang-side" data-i18n="gs.hang.long">Hang my piece in the garden</button>
+      <p class="hint" id="hang-hint">It stays in My pieces on this device, ready whenever you come back.</p>
+      <p class="jumps">
+        <a href="#my-pieces" data-i18n="gs.mine.link">See my pieces</a>
+        <span aria-hidden="true">·</span>
+        <a href="#garden-wall" data-i18n="gs.wall">Garden wall</a>
+      </p>
       <p class="fine">
         <a href="mailto:zhaojinxiu0525@gmail.com">zhaojinxiu0525@gmail.com</a>
         <span aria-hidden="true">·</span>
         <a href="tel:+8615993986893">15993986893</a>
       </p>
-      <noscript><p>Garden studio needs JavaScript to draw. 花园灵感需要 JavaScript 才能涂鸦。</p></noscript>
+      <noscript><p>Garden studio needs JavaScript to draw. 花园工作室需要 JavaScript 才能涂鸦。</p></noscript>
     </div>
+  </div>
+
+  <section class="gallery" id="garden-wall" aria-labelledby="wall-title">
+    <h2 id="wall-title" data-i18n="gs.wall">Garden wall</h2>
+    <p class="lead" data-i18n="gs.wall.lead">Newest first. Every piece hung here belongs to the person who made it.</p>
+    <p class="wall-note" id="wall-note" hidden></p>
+    <p class="wall-status" id="wall-status"></p>
+    <div class="piece-grid" id="wall-grid"></div>
+  </section>
+
+  <section class="gallery" id="my-pieces" aria-labelledby="mine-title">
+    <h2 id="mine-title" data-i18n="gs.mine">My pieces</h2>
+    <p class="lead" data-i18n="gs.mine.lead">Saved on this device. Open one to keep drawing.</p>
+    <p class="mine-note" id="mine-note" hidden></p>
+    <div class="piece-grid" id="mine-grid"></div>
+  </section>
+
+  <dialog class="sheet" id="hang-dialog" aria-labelledby="hang-heading">
+    <form id="hang-form">
+      <p class="kicker" data-i18n="gs.form.kicker">Your piece</p>
+      <h2 id="hang-heading" data-i18n="gs.form.heading">Hang my piece in the garden</h2>
+      <p class="hint" id="form-hint">Optional. A copy stays in My pieces on this device, so you can open it again.</p>
+      <label class="field">
+        <span data-i18n="gs.form.title">A title</span>
+        <input id="piece-title" name="title" maxlength="60" autocomplete="off" data-i18n-placeholder="gs.form.titlePh" placeholder="Evening path" />
+      </label>
+      <label class="field">
+        <span data-i18n="gs.form.name">A signature</span>
+        <input id="piece-name" name="name" maxlength="40" autocomplete="nickname" data-i18n-placeholder="gs.form.namePh" placeholder="Your name, if you like" />
+      </label>
+      <p class="hang-status" id="hang-status" role="status"></p>
+      <div class="sheet-actions">
+        <button type="submit" class="text-btn primary" id="hang-submit" data-i18n="gs.form.submit">Hang it in the garden</button>
+        <button type="button" class="text-btn" id="hang-cancel" data-i18n="gs.form.cancel">Keep drawing</button>
+      </div>
+    </form>
+  </dialog>
   </main>
+  <script src="assets/garden-config.js"></script>
   <script src="assets/i18n.js"></script>
   <script src="assets/garden-studio.js"></script>
 </body>

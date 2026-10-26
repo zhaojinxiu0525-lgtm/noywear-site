@@ -1,4 +1,4 @@
-/* NoY Garden Studio — client-side doodle + silhouette stamps. No network, no checkout. */
+/* NoY Garden Studio — doodle on garden paper, keep a piece, hang it on the wall. */
 (function () {
   const canvas = document.getElementById("garden-canvas");
   const board = document.getElementById("board");
@@ -48,6 +48,14 @@
   let pointerDown = false;
   let currentLang = "en";
   let showChrome = true;
+  const PIECE_STORE = "noy-garden-pieces";
+  const SIGN_STORE = "noy-garden-signature";
+  let myPieces = [];
+  let remotePieces = null;
+  let wallError = false;
+  let hanging = false;
+  let hangOpener = null;
+  let warnedKey = false;
 
   function t(key) {
     return I18N ? I18N.t(currentLang, key) : key;
@@ -413,10 +421,10 @@
     }
   }
 
-  function exportURL() {
+  function exportCanvas() {
     const off = document.createElement("canvas");
-    off.width = canvas.width;
-    off.height = canvas.height;
+    off.width = Math.max(1, canvas.width);
+    off.height = Math.max(1, canvas.height);
     const octx = off.getContext("2d");
     octx.setTransform(dpr, 0, 0, dpr, 0, 0);
     octx.drawImage(paper, 0, 0, cssW, cssH);
@@ -425,7 +433,37 @@
       const b = stampBox(s);
       drawStamp(octx, s.type, b.x, b.y, b.s, s.color);
     });
-    return off.toDataURL("image/png");
+    return off;
+  }
+
+  function exportURL() {
+    return exportCanvas().toDataURL("image/png");
+  }
+
+  function scaledCanvas(source, maxEdge) {
+    const edge = Math.max(source.width, source.height, 1);
+    const scale = Math.min(1, maxEdge / edge);
+    const w = Math.max(1, Math.round(source.width * scale));
+    const h = Math.max(1, Math.round(source.height * scale));
+    const out = document.createElement("canvas");
+    out.width = w;
+    out.height = h;
+    const octx = out.getContext("2d");
+    octx.fillStyle = "#f6efe6";
+    octx.fillRect(0, 0, w, h);
+    octx.drawImage(source, 0, 0, w, h);
+    return out;
+  }
+
+  function canvasToJpegBlob(source, maxEdge, quality) {
+    const out = scaledCanvas(source, maxEdge);
+    return new Promise(function (resolve) {
+      if (!out.toBlob) {
+        resolve(null);
+        return;
+      }
+      out.toBlob(function (blob) { resolve(blob); }, "image/jpeg", quality);
+    });
   }
 
   function sync() {
@@ -451,14 +489,6 @@
       if (sizeVal) sizeVal.textContent = sizeInput.value;
     }
     board.setAttribute("data-mode", STAMPS.indexOf(tool) >= 0 ? "stamp" : tool);
-  }
-
-  function syncMail() {
-    const link = document.getElementById("mail-link");
-    if (!link) return;
-    const subject = t("gs.mail.subject");
-    const body = t("gs.mail.body");
-    link.href = "mailto:zhaojinxiu0525@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   }
 
   function fit() {
@@ -582,7 +612,7 @@
     const url = exportURL();
     const a = document.createElement("a");
     a.href = url;
-    a.download = "noy-garden-inspiration.png";
+    a.download = "noy-garden-piece.png";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -760,6 +790,547 @@
     nudgeId = null;
   }
 
+  function uuid() {
+    if (window.crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (ch) {
+      const n = Math.random() * 16 | 0;
+      return (ch === "x" ? n : (n & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  function cleanText(value, max) {
+    return String(value || "").replace(/[\u0000-\u001F\u007F]/g, "").replace(/\s+/g, " ").trim().slice(0, max);
+  }
+
+  function jwtRole(key) {
+    try {
+      const part = String(key).split(".")[1];
+      if (!part) return "";
+      const pad = part.replace(/-/g, "+").replace(/_/g, "/");
+      const json = JSON.parse(atob(pad));
+      return json && json.role ? String(json.role) : "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function warnSecretKey() {
+    if (warnedKey) return;
+    warnedKey = true;
+    console.warn("NoY garden wall: refusing a secret key. Paste the anon or publishable key only.");
+  }
+
+  function keyIsPublic(key) {
+    if (!key) return false;
+    if (key.indexOf("sb_secret_") === 0) {
+      warnSecretKey();
+      return false;
+    }
+    if (jwtRole(key) === "service_role") {
+      warnSecretKey();
+      return false;
+    }
+    return true;
+  }
+
+  function gardenConfig() {
+    const c = window.NOY_GARDEN_CONFIG || {};
+    const url = String(c.supabaseUrl || "").trim().replace(/\/+$/, "");
+    const key = String(c.supabaseAnonKey || "").trim();
+    const bucket = String(c.bucket || "garden-pieces").trim();
+    if (!/^https:\/\/[a-z0-9.-]+$/i.test(url)) return null;
+    if (!/^[a-z0-9][a-z0-9-]{0,47}$/i.test(bucket)) return null;
+    if (!keyIsPublic(key)) return null;
+    return { url: url, key: key, bucket: bucket };
+  }
+
+  function hasArt() {
+    if (stamps.length) return true;
+    return strokes.some(function (s) { return s.points && s.points.length; });
+  }
+
+  function round4(n) {
+    return Math.round(Number(n) * 10000) / 10000;
+  }
+
+  function packState() {
+    return {
+      strokes: strokes.map(function (s) {
+        return {
+          color: s.color,
+          size: s.size,
+          erase: !!s.erase,
+          points: s.points.map(function (p) { return { x: round4(p.x), y: round4(p.y) }; })
+        };
+      }),
+      stamps: stamps.map(function (s) {
+        return {
+          id: s.id,
+          type: s.type,
+          x: round4(s.x),
+          y: round4(s.y),
+          size: round4(s.size),
+          color: s.color
+        };
+      })
+    };
+  }
+
+  function normalizeState(state) {
+    if (!state || !Array.isArray(state.strokes) || !Array.isArray(state.stamps)) return null;
+    const nextStrokes = [];
+    state.strokes.forEach(function (s) {
+      if (!s || !Array.isArray(s.points)) return;
+      const color = (typeof s.color === "string" && /^#[0-9a-fA-F]{6}$/.test(s.color)) ? s.color : COLORS.garden;
+      const size = Number(s.size);
+      const points = [];
+      s.points.forEach(function (p) {
+        if (!p || !isFinite(Number(p.x)) || !isFinite(Number(p.y))) return;
+        points.push({ x: clamp(Number(p.x), 0, 1), y: clamp(Number(p.y), 0, 1) });
+      });
+      if (!points.length) return;
+      nextStrokes.push({
+        color: color,
+        size: isFinite(size) ? clamp(size, 1, 80) : 8,
+        erase: !!s.erase,
+        points: points
+      });
+    });
+    let nextId = 1;
+    const nextStamps = [];
+    state.stamps.forEach(function (s) {
+      if (!s || STAMPS.indexOf(s.type) < 0) return;
+      const color = (typeof s.color === "string" && /^#[0-9a-fA-F]{6}$/.test(s.color)) ? s.color : (STAMP_TINT[s.type] || COLORS.garden);
+      const x = Number(s.x);
+      const y = Number(s.y);
+      const size = Number(s.size);
+      if (!isFinite(x) || !isFinite(y) || !isFinite(size)) return;
+      nextStamps.push({
+        id: nextId++,
+        type: s.type,
+        x: clamp(x, 0.06, 0.94),
+        y: clamp(y, 0.06, 0.94),
+        size: clamp(size, 0.08, 0.52),
+        color: color
+      });
+    });
+    return { strokes: nextStrokes, stamps: nextStamps, nextId: nextId };
+  }
+
+  function loadPieces() {
+    try {
+      const raw = localStorage.getItem(PIECE_STORE);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function saveList(list) {
+    const next = list.slice(0, 24);
+    for (let n = next.length; n >= 1; n--) {
+      try {
+        localStorage.setItem(PIECE_STORE, JSON.stringify(next.slice(0, n)));
+        return next.slice(0, n);
+      } catch (_) {}
+    }
+    if (next[0]) {
+      const slim = Object.assign({}, next[0], { thumb: "" });
+      try {
+        localStorage.setItem(PIECE_STORE, JSON.stringify([slim]));
+        return [slim];
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  function rememberSignature(name) {
+    try {
+      if (name) localStorage.setItem(SIGN_STORE, name);
+    } catch (_) {}
+  }
+
+  function savedSignature() {
+    try { return localStorage.getItem(SIGN_STORE) || ""; } catch (_) { return ""; }
+  }
+
+  function withTimeout(ms) {
+    if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
+      return AbortSignal.timeout(ms);
+    }
+    return undefined;
+  }
+
+  function apiHeaders(cfg, extra) {
+    const headers = {
+      apikey: cfg.key,
+      Authorization: "Bearer " + cfg.key
+    };
+    if (extra) Object.keys(extra).forEach(function (k) { headers[k] = extra[k]; });
+    return headers;
+  }
+
+  function publicImageUrl(cfg, path) {
+    return cfg.url + "/storage/v1/object/public/" + cfg.bucket + "/" + String(path || "").replace(/^\/+/, "");
+  }
+
+  function safeSrc(src) {
+    if (!src || typeof src !== "string") return "";
+    if (src.indexOf("data:image/jpeg") === 0 || src.indexOf("data:image/png") === 0) return src;
+    if (/^https:\/\/[a-z0-9.-]+\/\S+$/i.test(src)) return src;
+    return "";
+  }
+
+  async function publishPiece(id, blob, title, name) {
+    const cfg = gardenConfig();
+    if (!cfg || !blob) return { ok: false };
+    const path = id + ".jpg";
+    const signal = withTimeout(20000);
+    try {
+      const up = await fetch(cfg.url + "/storage/v1/object/" + cfg.bucket + "/" + path, {
+        method: "POST",
+        headers: apiHeaders(cfg, { "Content-Type": "image/jpeg" }),
+        body: blob,
+        signal: signal
+      });
+      if (!up.ok) return { ok: false };
+      const row = await fetch(cfg.url + "/rest/v1/garden_pieces", {
+        method: "POST",
+        headers: apiHeaders(cfg, { "Content-Type": "application/json", Prefer: "return=minimal" }),
+        body: JSON.stringify({
+          id: id,
+          display_name: name || null,
+          title: title || null,
+          image_path: path,
+          published: true
+        }),
+        signal: signal
+      });
+      if (!row.ok) return { ok: false };
+      return { ok: true, url: publicImageUrl(cfg, path) };
+    } catch (_) {
+      return { ok: false };
+    }
+  }
+
+  async function fetchWall() {
+    const cfg = gardenConfig();
+    if (!cfg) return null;
+    const query = "select=id,created_at,display_name,title,image_path&published=eq.true&order=created_at.desc&limit=30";
+    const res = await fetch(cfg.url + "/rest/v1/garden_pieces?" + query, {
+      headers: apiHeaders(cfg),
+      cache: "no-store",
+      signal: withTimeout(15000)
+    });
+    if (!res.ok) throw new Error("wall");
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error("wall");
+    return rows.map(function (row) {
+      return {
+        id: row.id,
+        title: cleanText(row.title, 60),
+        name: cleanText(row.display_name, 40),
+        createdAt: row.created_at,
+        src: publicImageUrl(cfg, row.image_path)
+      };
+    });
+  }
+
+  function formatWhen(iso) {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    try {
+      return d.toLocaleDateString(currentLang === "zh" ? "zh-CN" : "en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function syncKeepCopy() {
+    const on = !!gardenConfig();
+    const hint = document.getElementById("hang-hint");
+    const formHint = document.getElementById("form-hint");
+    const mineNote = document.getElementById("mine-note");
+    const wallNote = document.getElementById("wall-note");
+    if (hint) hint.textContent = t(on ? "gs.hint.public" : "gs.hint.local");
+    if (formHint) formHint.textContent = t(on ? "gs.form.hint" : "gs.form.hintLocal");
+    if (mineNote) {
+      mineNote.hidden = !on;
+      mineNote.textContent = on ? t("gs.mine.note") : "";
+    }
+    if (wallNote) {
+      const show = !on && myPieces.length > 0;
+      wallNote.hidden = !show;
+      wallNote.textContent = show ? t("gs.wall.device") : "";
+    }
+  }
+
+  function fillGrid(grid, items, mode) {
+    if (!grid) return;
+    grid.textContent = "";
+    if (!items.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-line";
+      empty.textContent = t(mode === "mine" ? "gs.mine.empty" : "gs.wall.empty");
+      grid.appendChild(empty);
+      return;
+    }
+    items.forEach(function (item) {
+      const card = document.createElement("article");
+      card.className = "piece-card";
+      const src = safeSrc(item.src || item.thumb || item.imageUrl || "");
+      if (src) {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = item.title || t("gs.untitled");
+        img.loading = "lazy";
+        img.decoding = "async";
+        card.appendChild(img);
+      } else {
+        const blank = document.createElement("div");
+        blank.className = "piece-fallback";
+        card.appendChild(blank);
+      }
+      const heading = document.createElement("h3");
+      heading.textContent = item.title || t("gs.untitled");
+      card.appendChild(heading);
+      const meta = document.createElement("p");
+      meta.className = "piece-meta";
+      const bits = [];
+      if (item.name) bits.push(item.name);
+      const when = formatWhen(item.createdAt);
+      if (when) bits.push(when);
+      meta.textContent = bits.join(" · ");
+      card.appendChild(meta);
+      if (mode === "mine") {
+        const actions = document.createElement("div");
+        actions.className = "piece-actions";
+        const openBtn = document.createElement("button");
+        openBtn.type = "button";
+        openBtn.className = "text-btn";
+        openBtn.textContent = t("gs.open");
+        openBtn.addEventListener("click", function () { openPiece(item.id); });
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "text-btn";
+        removeBtn.textContent = t("gs.removeMine");
+        removeBtn.addEventListener("click", function () { removePiece(item.id); });
+        actions.appendChild(openBtn);
+        actions.appendChild(removeBtn);
+        card.appendChild(actions);
+      }
+      grid.appendChild(card);
+    });
+  }
+
+  function wallItems() {
+    if (gardenConfig()) return remotePieces || [];
+    return myPieces.map(function (p) {
+      return {
+        id: p.id,
+        title: p.title,
+        name: p.name,
+        createdAt: p.createdAt,
+        src: p.thumb || ""
+      };
+    });
+  }
+
+  function renderKeep() {
+    syncKeepCopy();
+    const status = document.getElementById("wall-status");
+    if (status) status.textContent = wallError ? t("gs.wall.error") : "";
+    fillGrid(document.getElementById("wall-grid"), wallItems(), "wall");
+    fillGrid(document.getElementById("mine-grid"), myPieces, "mine");
+  }
+
+  async function refreshWall() {
+    const status = document.getElementById("wall-status");
+    if (!gardenConfig()) {
+      remotePieces = null;
+      wallError = false;
+      renderKeep();
+      return;
+    }
+    if (status && !remotePieces) status.textContent = t("gs.loading");
+    try {
+      remotePieces = await fetchWall();
+      wallError = false;
+    } catch (_) {
+      if (!remotePieces) {
+        remotePieces = [];
+        wallError = true;
+      }
+    }
+    renderKeep();
+  }
+
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }
+
+  function openHang(event) {
+    if (hanging) return;
+    if (!hasArt()) {
+      announce("gs.did.needart");
+      return;
+    }
+    const dialog = document.getElementById("hang-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+    hangOpener = event && event.currentTarget ? event.currentTarget : null;
+    const nameInput = document.getElementById("piece-name");
+    if (nameInput && !nameInput.value) nameInput.value = savedSignature();
+    const status = document.getElementById("hang-status");
+    if (status) status.textContent = "";
+    if (!dialog.open) dialog.showModal();
+    const titleInput = document.getElementById("piece-title");
+    if (titleInput) titleInput.focus();
+  }
+
+  function closeHang() {
+    const dialog = document.getElementById("hang-dialog");
+    if (dialog && dialog.open) dialog.close();
+    if (hangOpener && hangOpener.focus) hangOpener.focus();
+  }
+
+  async function hangPiece(event) {
+    event.preventDefault();
+    if (hanging) return;
+    if (!hasArt()) {
+      announce("gs.did.needart");
+      closeHang();
+      return;
+    }
+    hanging = true;
+    const submit = document.getElementById("hang-submit");
+    const cancel = document.getElementById("hang-cancel");
+    const status = document.getElementById("hang-status");
+    if (submit) submit.disabled = true;
+    if (cancel) cancel.disabled = true;
+    if (status) status.textContent = t("gs.hanging");
+    const title = cleanText(document.getElementById("piece-title").value, 60);
+    const name = cleanText(document.getElementById("piece-name").value, 40);
+    rememberSignature(name);
+    const id = uuid();
+    const flat = exportCanvas();
+    let blob = await canvasToJpegBlob(flat, 1280, 0.82);
+    if (blob && blob.size > 450000) blob = await canvasToJpegBlob(flat, 960, 0.66);
+    const record = {
+      id: id,
+      title: title,
+      name: name,
+      createdAt: new Date().toISOString(),
+      thumb: scaledCanvas(flat, 640).toDataURL("image/jpeg", 0.7),
+      state: packState(),
+      onWall: false
+    };
+    let saved = saveList([record].concat(loadPieces().filter(function (p) { return p.id !== id; })));
+    let published = false;
+    const configured = !!gardenConfig();
+    if (configured && blob) {
+      const result = await publishPiece(id, blob, title, name);
+      if (result.ok) {
+        published = true;
+        record.onWall = true;
+        record.imageUrl = result.url;
+        saved = saveList([record].concat(loadPieces().filter(function (p) { return p.id !== id; }))) || saved;
+      }
+    }
+    if (saved) myPieces = saved;
+    hanging = false;
+    if (submit) submit.disabled = false;
+    if (cancel) cancel.disabled = false;
+    if (status) status.textContent = "";
+    if (!saved && !published) {
+      announce("gs.did.nospace");
+      return;
+    }
+    const titleInput = document.getElementById("piece-title");
+    if (titleInput) titleInput.value = "";
+    closeHang();
+    if (published) {
+      const item = {
+        id: id,
+        title: title,
+        name: name,
+        createdAt: record.createdAt,
+        src: record.imageUrl
+      };
+      remotePieces = [item].concat((remotePieces || []).filter(function (p) { return p.id !== id; }));
+      wallError = false;
+      renderKeep();
+      announce("gs.did.hung");
+      scrollToId("garden-wall");
+      refreshWall().then(function () {
+        if (remotePieces && !remotePieces.some(function (p) { return p.id === id; })) {
+          remotePieces.unshift(item);
+          wallError = false;
+          renderKeep();
+        }
+      });
+    } else if (configured) {
+      renderKeep();
+      announce("gs.did.wallfail");
+      scrollToId("my-pieces");
+    } else {
+      renderKeep();
+      announce("gs.did.saved");
+      scrollToId("garden-wall");
+    }
+  }
+
+  function openPiece(id) {
+    if (pointerDown) return;
+    const record = myPieces.find(function (p) { return p.id === id; });
+    if (!record) return;
+    const norm = normalizeState(record.state);
+    if (!norm) {
+      announce("gs.did.bad");
+      return;
+    }
+    remember({ type: "clear", strokes: strokes, stamps: stamps });
+    strokes = norm.strokes;
+    stamps = norm.stamps;
+    uid = norm.nextId;
+    selectedId = null;
+    activeStroke = null;
+    dragging = null;
+    dragOrigin = null;
+    redrawInk();
+    render(true);
+    sync();
+    announce("gs.did.open");
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    board.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    canvas.focus({ preventScroll: true });
+  }
+
+  function removePiece(id) {
+    if (!window.confirm(t("gs.remove.confirm"))) return;
+    const remaining = loadPieces().filter(function (p) { return p.id !== id; });
+    if (!remaining.length) {
+      try { localStorage.removeItem(PIECE_STORE); } catch (_) {}
+      myPieces = [];
+    } else {
+      const saved = saveList(remaining);
+      if (!saved) {
+        announce("gs.did.nospace");
+        return;
+      }
+      myPieces = saved;
+    }
+    renderKeep();
+    announce("gs.did.removed");
+  }
+
   function bind() {
     document.querySelectorAll("[data-tool]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -784,6 +1355,16 @@
     document.getElementById("undo").addEventListener("click", undo);
     document.getElementById("clear").addEventListener("click", clearAll);
     document.getElementById("download").addEventListener("click", download);
+    document.getElementById("hang").addEventListener("click", openHang);
+    document.getElementById("hang-side").addEventListener("click", openHang);
+    document.getElementById("hang-form").addEventListener("submit", hangPiece);
+    document.getElementById("hang-cancel").addEventListener("click", closeHang);
+    const dialog = document.getElementById("hang-dialog");
+    if (dialog) {
+      dialog.addEventListener("click", function (e) {
+        if (e.target === dialog) closeHang();
+      });
+    }
     document.getElementById("stamp-smaller").addEventListener("click", function () { scaleSelected(1 / 1.12); });
     document.getElementById("stamp-larger").addEventListener("click", function () { scaleSelected(1.12); });
     document.getElementById("stamp-remove").addEventListener("click", removeSelected);
@@ -799,20 +1380,22 @@
   }
 
   function boot() {
+    myPieces = loadPieces();
     if (I18N) {
+      document.addEventListener("noy:lang", function (e) {
+        currentLang = e.detail.lang;
+        renderKeep();
+      });
       I18N.bindSwitcher();
       currentLang = I18N.detect();
       I18N.apply(currentLang);
-      document.addEventListener("noy:lang", function (e) {
-        currentLang = e.detail.lang;
-        syncMail();
-      });
     }
-    syncMail();
     bind();
     sync();
     fit();
     paintIcons();
+    renderKeep();
+    refreshWall();
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
         if (!cssW) return;
