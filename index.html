@@ -113,133 +113,222 @@
     }
     .reveal.in { opacity: 1; transform: none; filter: none; }
 
-    /* Header */
+    /* Header — floating language bar */
     .topbar {
       position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(18px) saturate(1.15);
-      -webkit-backdrop-filter: blur(18px) saturate(1.15);
-      background: rgba(244,238,230,0.78);
-      border-bottom: 1px solid transparent;
-      transition: border-color .4s, background .4s;
+      padding: 14px 18px 0;
+      background: transparent;
+      border: 0;
     }
-    .topbar.scrolled { border-bottom-color: var(--line); background: rgba(244,238,230,0.92); }
+    .topbar-card {
+      max-width: 1180px; margin: 0 auto;
+      background: rgba(255,250,244,0.78);
+      border: 1px solid rgba(44,50,44,0.08);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(77,94,74,0.08);
+      backdrop-filter: blur(18px) saturate(1.12);
+      -webkit-backdrop-filter: blur(18px) saturate(1.12);
+      transition: background .4s, box-shadow .4s, border-color .4s;
+    }
+    .topbar.scrolled .topbar-card {
+      background: rgba(255,250,244,0.92);
+      border-color: var(--line);
+      box-shadow: 0 14px 36px rgba(77,94,74,0.1);
+    }
     .topbar-inner {
-      max-width: 1480px; margin: 0 auto; padding: 0 40px;
-      height: var(--header-h);
-      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+      height: 64px;
+      padding: 0 12px 0 22px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
-    .nav-left, .nav-right {
-      display: flex; gap: 26px; align-items: center;
-      font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 400;
-    }
-    .nav-right { justify-content: flex-end; }
-    .nav-left a:hover, .nav-right a:hover { color: var(--accent); }
     .brand {
       font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: 26px; font-weight: 500; letter-spacing: 0.48em; margin-right: -0.48em; line-height: 1;
+      font-size: 26px; font-weight: 500; letter-spacing: 0.42em; margin-right: -0.28em; line-height: 1;
+      flex: 0 0 auto;
     }
-    .menu-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; justify-self: end; }
-    .menu-toggle span { display: block; width: 18px; height: 1px; background: var(--ink); position: relative; }
-    .menu-toggle span::before, .menu-toggle span::after {
-      content: ""; position: absolute; left: 0; width: 18px; height: 1px; background: var(--ink);
+    .nav-links {
+      position: relative;
+      display: flex; align-items: center; justify-content: center; gap: 2px;
+      flex: 1 1 auto; min-width: 0;
     }
-    .menu-toggle span::before { top: -6px; }
-    .menu-toggle span::after { top: 6px; }
+    .nav-pill {
+      position: absolute; top: 0; left: 0; z-index: 0;
+      border-radius: 999px;
+      background: rgba(233,223,239,0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .4s cubic-bezier(.16,1,.3,1), width .4s cubic-bezier(.16,1,.3,1), height .4s cubic-bezier(.16,1,.3,1), opacity .2s;
+    }
+    .nav-links a {
+      position: relative; z-index: 1;
+      padding: 7px 10px; border-radius: 999px;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 400;
+      color: var(--muted); white-space: nowrap;
+      transition: color .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="true"] { color: var(--ink); }
+    .nav-links a.nav-studio { color: var(--accent); }
+    .nav-links a.nav-studio:hover,
+    .nav-links a.nav-studio:focus-visible { color: var(--garden); }
+    .nav-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+    .nav-mobile-tools { display: none; align-items: center; gap: 2px; }
+    .menu-toggle {
+      display: none; width: 40px; height: 40px;
+      align-items: center; justify-content: center; border-radius: 999px;
+      color: var(--ink);
+    }
+    .menu-toggle:hover, .menu-toggle[aria-expanded="true"] { background: rgba(233,223,239,0.75); }
+    .menu-bars { position: relative; display: block; width: 16px; height: 12px; }
+    .menu-bars span {
+      position: absolute; left: 0; right: 0; height: 1.5px; border-radius: 2px;
+      background: currentColor; transform-origin: center;
+      transition: transform .2s cubic-bezier(.16,1,.3,1), top .2s cubic-bezier(.16,1,.3,1);
+    }
+    .menu-bars span:first-child { top: 1px; }
+    .menu-bars span:last-child { top: 9px; }
+    .menu-toggle[aria-expanded="true"] .menu-bars span:first-child { top: 5px; transform: rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] .menu-bars span:last-child { top: 5px; transform: rotate(-45deg); }
     .mobile-nav {
-      display: none; border-top: 1px solid var(--line); padding: 20px 40px 28px;
-      flex-direction: column; gap: 18px; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; background: var(--bg);
+      display: none; flex-direction: column; gap: 4px;
+      padding: 4px 12px 14px;
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
     }
-    .mobile-nav.open { display: flex; }
+    .mobile-nav.open {
+      display: flex;
+      max-height: calc(100svh - 86px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .mobile-nav a {
+      display: flex; align-items: center;
+      padding: 11px 12px; border-radius: 12px; color: var(--ink-soft);
+    }
+    .mobile-nav a:hover, .mobile-nav a:focus-visible { background: rgba(233,223,239,0.75); color: var(--ink); }
+    .mobile-nav a.nav-studio { color: var(--accent); }
+    .mobile-nav.open a { animation: menu-item .28s cubic-bezier(.16,1,.3,1) both; }
+    .mobile-nav.open a:nth-child(2) { animation-delay: .03s; }
+    .mobile-nav.open a:nth-child(3) { animation-delay: .05s; }
+    .mobile-nav.open a:nth-child(4) { animation-delay: .07s; }
+    .mobile-nav.open a:nth-child(5) { animation-delay: .09s; }
+    .mobile-nav.open a:nth-child(6) { animation-delay: .11s; }
+    .mobile-nav.open a:nth-child(7) { animation-delay: .13s; }
+    .mobile-nav.open a:nth-child(8) { animation-delay: .15s; }
+    .mobile-nav.open a:nth-child(9) { animation-delay: .17s; }
+    .mobile-nav.open a:nth-child(10) { animation-delay: .19s; }
+    .mobile-nav.open a:nth-child(11) { animation-delay: .21s; }
+    @keyframes menu-item {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: none; }
+    }
 
-    /* —— COLLAGE HERO —— */
+    /* —— FASHION HERO —— */
     .hero {
       position: relative; z-index: 1;
-      max-width: 1480px; margin: 0 auto;
-      padding: 28px 40px 20px;
+      max-width: 1240px; margin: 0 auto;
+      padding: 36px 40px 28px;
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 28px;
-      min-height: calc(100vh - var(--header-h) - 40px);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 48px;
+      min-height: calc(100svh - 110px);
       align-items: stretch;
     }
-    .hero-stage {
-      position: relative; min-height: 620px;
+    .hero-look {
+      position: relative;
+      order: 2;
+      min-height: 560px;
     }
-    .frame {
-      position: absolute; overflow: hidden; border-radius: 3px;
-      box-shadow: 0 18px 50px rgba(77,94,74,0.12);
-      background: var(--cream);
+    .hero-glow {
+      position: absolute; z-index: 0;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: #f8b3c4;
+      filter: blur(72px);
+      opacity: 0.55;
+      top: -28px; left: -36px;
+      pointer-events: none;
     }
-    .frame img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 1.4s ease;
-    }
-    .frame:hover img { transform: scale(1.03); }
-    .frame.main {
-      inset: 0 12% 8% 0;
-      z-index: 1;
-    }
-    .frame.main img { animation: slow-ken 22s ease-in-out infinite alternate; }
-    @keyframes slow-ken {
-      from { transform: scale(1) translate(0,0); }
-      to { transform: scale(1.06) translate(-1%, -1%); }
-    }
-    .frame.float-a {
-      width: 38%; height: 42%;
-      right: 0; bottom: 0; z-index: 3;
-      border: 6px solid var(--paper);
-      transform: rotate(2.5deg);
-      animation: float-soft 9s ease-in-out infinite alternate;
-    }
-    .frame.float-b {
-      width: 28%; height: 30%;
-      left: -2%; top: 8%; z-index: 2;
-      border: 5px solid rgba(255,250,244,0.9);
-      transform: rotate(-3deg);
-      animation: float-soft 11s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes float-soft {
-      from { transform: translateY(0) rotate(var(--r, 2deg)); }
-      to { transform: translateY(-10px) rotate(var(--r, 2deg)); }
-    }
-    .frame.float-a { --r: 2.5deg; }
-    .frame.float-b { --r: -3deg; }
-    .hero-wash {
-      position: absolute; inset: auto 0 0 auto; width: 55%; height: 40%;
-      background: url("assets/brush-breeze.jpg") center/cover;
-      opacity: 0.35; mix-blend-mode: multiply; pointer-events: none; z-index: 0;
-      border-radius: 50% 20% 40% 30%; filter: blur(2px);
-      animation: wash-breathe 14s ease-in-out infinite alternate;
-    }
-    @keyframes wash-breathe {
-      from { opacity: 0.28; transform: scale(1); }
-      to { opacity: 0.42; transform: scale(1.05); }
+    .hero-look img {
+      position: relative; z-index: 1;
+      width: 100%; height: 100%; min-height: 560px;
+      object-fit: cover; object-position: center 42%;
+      border-radius: 22px;
+      box-shadow: 0 28px 64px rgba(77,94,74,0.16);
+      filter: brightness(1.05) saturate(1.03);
     }
     .hero-copy {
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 40px 8px 40px 24px; position: relative; z-index: 2;
+      order: 1;
+      display: flex; flex-direction: column; justify-content: space-between;
+      gap: 28px;
+      min-height: 560px;
+      padding: 8px 8px 8px 0;
+      position: relative; z-index: 2;
     }
+    .hero h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(76px, 9vw, 124px);
+      line-height: 0.82;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+    }
+    .hero-cats {
+      list-style: none;
+      display: grid;
+      gap: 2px;
+      margin-top: 8px;
+    }
+    .hero-cats a {
+      display: inline-block;
+      font-size: clamp(18px, 1.7vw, 22px);
+      letter-spacing: -0.03em;
+      line-height: 1.35;
+      color: rgba(44,50,44,0.82);
+      transition: transform .4s ease, color .4s ease;
+    }
+    .hero-cats a:hover,
+    .hero-cats a:focus-visible {
+      transform: translateY(-3px);
+      color: var(--ink);
+    }
+    .hero-cats li {
+      opacity: 0;
+      animation: cat-in .7s ease forwards;
+    }
+    .hero-cats li:nth-child(1) { animation-delay: .04s; }
+    .hero-cats li:nth-child(2) { animation-delay: .1s; }
+    .hero-cats li:nth-child(3) { animation-delay: .16s; }
+    .hero-cats li:nth-child(4) { animation-delay: .22s; }
+    .hero-cats li:nth-child(5) { animation-delay: .28s; }
+    @keyframes cat-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .hero-note { max-width: 42ch; padding-top: 12px; }
+    .hero-note h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(26px, 2.4vw, 34px);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .hero-blurb {
+      margin-top: 14px;
+      font-size: 17px;
+      line-height: 1.55;
+      letter-spacing: -0.015em;
+      color: rgba(44,50,44,0.92);
+      text-wrap: pretty;
+    }
+    .hero-blurb a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+    .hero-blurb a:hover { color: var(--accent); }
     .eyebrow {
       font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
       color: var(--accent); margin-bottom: 22px; font-weight: 400;
     }
-    .hero h1 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-weight: 400; font-size: clamp(46px, 6.4vw, 82px);
-      line-height: 0.98; letter-spacing: -0.03em; margin-bottom: 12px;
-    }
-    .hero h1 em { font-style: italic; color: var(--garden); font-weight: 400; }
-    .hero-verse {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-style: italic; font-size: clamp(18px, 2vw, 24px);
-      color: var(--muted); margin: 8px 0 28px; line-height: 1.4;
-      max-width: 22ch;
-    }
-    .hero-lead {
-      font-size: 15px; color: var(--muted); max-width: 36ch;
-      margin-bottom: 40px; line-height: 1.85;
-    }
-    .hero-actions { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 168px; height: 48px; padding: 0 26px;
@@ -458,6 +547,10 @@
       opacity: 0.32; mix-blend-mode: soft-light; pointer-events: none;
       animation: wash-breathe 16s ease-in-out infinite alternate;
     }
+    @keyframes wash-breathe {
+      from { opacity: 0.28; transform: scale(1); }
+      to { opacity: 0.42; transform: scale(1.05); }
+    }
     .manifesto-card {
       position: relative; z-index: 1;
       max-width: 720px; margin: 0 auto; text-align: center;
@@ -592,20 +685,19 @@
     @media (max-width: 980px) {
       :root { --header-h: 62px; }
       .garden-sky, .light-pools { display: none; }
-      .topbar-inner, .section, .manifesto, .contact-band, footer, .legal, .atelier-wrap, .hero, .verse-band {
+      .section, .manifesto, .contact-band, footer, .legal, .atelier-wrap, .hero, .verse-band {
         padding-left: 20px; padding-right: 20px;
       }
-      .topbar-inner { padding: 0 20px; }
-      .nav-left, .nav-right { display: none; }
-      .menu-toggle { display: flex; }
-      .topbar-inner { grid-template-columns: auto 1fr auto; }
-      .brand { justify-self: center; font-size: 22px; letter-spacing: 0.4em; margin-right: -0.4em; }
-      .hero { grid-template-columns: 1fr; gap: 20px; min-height: auto; padding-top: 12px; }
-      .hero-stage { min-height: 72vw; order: 1; }
-      .hero-copy { order: 2; padding: 12px 0 28px; }
-      .frame.main { inset: 0 8% 12% 0; }
-      .frame.float-a { width: 42%; height: 38%; }
-      .frame.float-b { width: 32%; height: 28%; }
+      .topbar { padding: 10px 12px 0; }
+      .topbar-inner { padding: 0 6px 0 16px; height: 56px; }
+      .nav-links, .nav-actions { display: none; }
+      .nav-mobile-tools, .menu-toggle { display: flex; }
+      .brand { font-size: 22px; letter-spacing: 0.36em; margin-right: -0.2em; }
+      .hero { grid-template-columns: 1fr; gap: 28px; min-height: auto; padding-top: 22px; }
+      .hero-look { order: 1; min-height: 0; }
+      .hero-look img { min-height: 0; height: auto; aspect-ratio: 4 / 5; }
+      .hero-copy { order: 2; min-height: 0; padding: 4px 0 8px; gap: 32px; }
+      .hero-glow { width: 200px; height: 200px; left: -20px; top: -16px; }
       .verse-band { grid-template-columns: 1fr; gap: 12px; text-align: left; margin: 8px 0; }
       .verse-band .cn { text-align: left; }
       .path-bleed { margin-top: 28px; height: 56vw; }
@@ -630,20 +722,46 @@
       .manifesto { padding: 72px 20px; }
       .manifesto-card { padding: 40px 24px; }
       .contact-band { padding: 64px 20px; }
-      .mobile-nav { padding-left: 20px; padding-right: 20px; }
+      .mobile-nav { padding-left: 10px; padding-right: 10px; }
     }
   
-    /* Language switch */
-    .lang-switch {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-      margin-left: 8px;
+    /* Language menu — globe trigger, still the CN/EN switch */
+    .lang-switch { position: relative; }
+    .lang-trigger {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      height: 36px; padding: 0 10px; border-radius: 999px;
+      font-size: 13px; letter-spacing: 0.01em; text-transform: none; font-weight: 400;
+      color: var(--ink-soft);
     }
-    .lang-switch button { opacity: 0.42; padding: 4px 2px; transition: opacity .2s; }
-    .lang-switch button:hover { opacity: 0.85; }
-    .lang-switch button.is-active { opacity: 1; border-bottom: 1px solid var(--garden); }
-    .lang-switch .sep { opacity: 0.3; }
-    .mobile-nav .lang-switch { margin: 8px 0 0; }
+    .lang-trigger-icon { width: 40px; padding: 0; }
+    .lang-trigger:hover,
+    .lang-trigger[aria-expanded="true"] { background: rgba(233,223,239,0.8); color: var(--ink); }
+    .lang-trigger .chev { opacity: 0.6; transition: transform .2s ease; }
+    .lang-trigger[aria-expanded="true"] .chev { transform: rotate(180deg); }
+    .lang-current { line-height: 1; }
+    .only-zh { display: none; }
+    html[lang="zh-Hans"] .only-en { display: none; }
+    html[lang="zh-Hans"] .only-zh { display: inline; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 8px); right: 0; z-index: 70;
+      min-width: 176px; padding: 6px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 18px 44px rgba(77,94,74,0.14);
+    }
+    .lang-menu[hidden] { display: none; }
+    .lang-menu button {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 9px;
+      font-size: 14px; letter-spacing: 0.01em; text-transform: none; text-align: start;
+      color: var(--ink); opacity: 1;
+    }
+    .lang-menu button:hover,
+    .lang-menu button:focus-visible,
+    .lang-menu button[data-active="true"] { background: rgba(233,223,239,0.85); }
+    .lang-check { margin-left: auto; opacity: 0; color: var(--garden); }
+    .lang-menu button.is-active .lang-check { opacity: 1; }
     /* Clickable atelier / collection cards */
     a.tile-link, a.look-link {
       color: inherit; text-decoration: none; display: block; height: 100%;
@@ -654,13 +772,12 @@
     .tile { transition: transform .45s ease; }
     a.tile-link:hover .tile, a.tile-link:focus-visible .tile { transform: translateY(-2px); }
 
-    .nav-left a.nav-studio, .mobile-nav a.nav-studio { color: var(--accent); }
-    .nav-left a.nav-studio:hover { color: var(--garden); }
     .nav-studio .nav-short { display: none; }
-    @media (min-width: 981px) and (max-width: 1220px) {
-      .nav-left, .nav-right { gap: 14px; letter-spacing: 0.14em; }
+    @media (min-width: 981px) and (max-width: 1180px) {
+      .nav-links a { letter-spacing: 0.1em; padding: 7px 7px; }
       .nav-studio .nav-long { display: none; }
       .nav-studio .nav-short { display: inline; }
+      .topbar-inner { padding-left: 16px; }
     }
 
     .studio-invite {
@@ -709,20 +826,44 @@
 <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span>
 </div>
 <header class="topbar" id="topbar">
+<div class="topbar-card">
 <div class="topbar-inner">
-<nav aria-label="Primary" class="nav-left" data-i18n-aria="nav.primary">
+<a class="brand" href="#top" id="top">NoY</a>
+<nav aria-label="Primary" class="nav-links" data-i18n-aria="nav.primary">
+<span aria-hidden="true" class="nav-pill"></span>
 <a data-i18n="nav.atelier" href="#atelier">Atelier</a>
 <a class="nav-studio" href="garden-studio.html"><span class="nav-long" data-i18n="nav.studio">Garden Studio</span><span class="nav-short" data-i18n="nav.studio.short">Studio</span></a>
 <a data-i18n="nav.collection" href="#collection">Collection</a>
 <a data-i18n="nav.shop" href="#shop">Shop</a>
-</nav>
-<a class="brand" href="#top" id="top">NoY</a>
-<nav aria-label="Secondary" class="nav-right" data-i18n-aria="nav.secondary">
 <a data-i18n="nav.about" href="#about">About</a>
 <a data-i18n="nav.private" href="#private">Private Client</a>
 <a data-i18n="nav.contact" href="#contact">Contact</a>
-<div aria-label="Language" class="lang-switch" data-i18n-aria="lang.label" role="group"><button aria-pressed="true" data-lang="en" type="button">EN</button><span aria-hidden="true" class="sep">|</span><button aria-pressed="false" data-lang="zh" type="button">中文</button></div></nav>
-<button aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu" class="menu-toggle" data-i18n-aria="nav.menuOpen" id="menu-toggle" type="button"><span></span></button>
+</nav>
+<div class="nav-actions">
+<div class="lang-switch" data-lang-root="desktop">
+<button aria-controls="lang-menu-desktop" aria-expanded="false" aria-haspopup="listbox" aria-label="Current language: English" class="lang-trigger" type="button">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z"></path></svg>
+<span class="lang-current"><span class="only-en">English</span><span class="only-zh">中文</span></span>
+<svg aria-hidden="true" class="chev" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" viewBox="0 0 16 16" width="14"><path d="M4 6l4 4 4-4"></path></svg>
+</button>
+<div aria-label="Select language" class="lang-menu" data-i18n-aria="lang.menu" hidden="" id="lang-menu-desktop" role="listbox">
+<button aria-selected="true" data-lang="en" role="option" type="button"><span data-i18n="lang.en">English</span><svg aria-hidden="true" class="lang-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 16 16" width="14"><path d="M3.5 8.5l3 3 6-6.5"></path></svg></button>
+<button aria-selected="false" data-lang="zh" role="option" type="button"><span data-i18n="lang.zh">中文</span><svg aria-hidden="true" class="lang-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 16 16" width="14"><path d="M3.5 8.5l3 3 6-6.5"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="nav-mobile-tools">
+<div class="lang-switch" data-lang-root="mobile">
+<button aria-controls="lang-menu-mobile" aria-expanded="false" aria-haspopup="listbox" aria-label="Current language: English" class="lang-trigger lang-trigger-icon" type="button">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z"></path></svg>
+</button>
+<div aria-label="Select language" class="lang-menu" data-i18n-aria="lang.menu" hidden="" id="lang-menu-mobile" role="listbox">
+<button aria-selected="true" data-lang="en" role="option" type="button"><span data-i18n="lang.en">English</span><svg aria-hidden="true" class="lang-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 16 16" width="14"><path d="M3.5 8.5l3 3 6-6.5"></path></svg></button>
+<button aria-selected="false" data-lang="zh" role="option" type="button"><span data-i18n="lang.zh">中文</span><svg aria-hidden="true" class="lang-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 16 16" width="14"><path d="M3.5 8.5l3 3 6-6.5"></path></svg></button>
+</div>
+</div>
+<button aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu" class="menu-toggle" id="menu-toggle" type="button"><span aria-hidden="true" class="menu-bars"><span></span><span></span></span></button>
+</div>
 </div>
 <nav aria-label="Mobile" class="mobile-nav" data-i18n-aria="nav.mobile" id="mobile-nav">
 <a data-i18n="nav.atelier" href="#atelier">Atelier</a>
@@ -736,34 +877,27 @@
 <a data-i18n="nav.size" href="#size">Size &amp; Fit</a>
 <a data-i18n="nav.private" href="#private">Private Client</a>
 <a data-i18n="nav.contact" href="#contact">Contact</a>
-<div aria-label="Language" class="lang-switch" data-i18n-aria="lang.label" role="group"><button aria-pressed="true" data-lang="en" type="button">EN</button><span aria-hidden="true" class="sep">|</span><button aria-pressed="false" data-lang="zh" type="button">中文</button></div></nav>
+</nav>
+</div>
 </header>
 <main id="main">
 <section aria-labelledby="hero-title" class="hero">
-<div class="hero-stage">
-<div aria-hidden="true" class="hero-wash"></div>
-<div class="frame main">
+<div class="hero-look">
+<div aria-hidden="true" class="hero-glow"></div>
 <img alt="Lilac blossoms in soft garden light" data-i18n-alt="alt.hero" height="1152" loading="eager" src="assets/hero.jpg" width="864"/>
 </div>
-<div class="frame float-b">
-<img alt="Lilac branch resting on white linen" data-i18n-alt="alt.detail" height="1000" loading="eager" src="assets/detail-petal-knit.jpg" width="1000"/>
-</div>
-<div class="frame float-a">
-<img alt="Close-up of lilac blooms in warm sun" data-i18n-alt="alt.wisteria" height="1152" loading="eager" src="assets/wisteria-knit.jpg" width="864"/>
-</div>
-</div>
-<div class="hero-copy reveal">
-<p class="eyebrow" data-i18n="hero.eyebrow">Soft tees · Light knits · Garden light</p>
-<h1 data-i18n="hero.title" data-i18n-html="hero.title" id="hero-title">Come in.<br/><em>Stay a while.</em></h1>
-<p class="hero-verse" data-i18n="hero.verse">Cloth as quiet as late light through leaves.</p>
-<p class="hero-lead" data-i18n="hero.lead">
-          NoY makes soft tees and light knits for days that refuse to hurry—
-          pieces that feel like walking into a garden: airy, a little painterly, entirely yours.
-        </p>
-<div class="hero-actions">
-<a class="btn primary" data-i18n="hero.cta" href="#atelier">Step into the atelier</a>
-<a class="text-link" data-i18n="hero.link" href="#collection">The first edit</a>
-<a class="text-link" data-i18n="nav.studio" href="garden-studio.html">Garden Studio</a>
+<div class="hero-copy">
+<h1 id="hero-title">NoY.</h1>
+<ul class="hero-cats">
+<li><a data-i18n="hero.cat.tee" href="coming-soon.html?piece=soft-tee">Soft tees</a></li>
+<li><a data-i18n="hero.cat.knit" href="coming-soon.html?piece=light-knit">Light knits</a></li>
+<li><a data-i18n="hero.cat.fresh" href="coming-soon.html?piece=fresh-cut">Fresh cut</a></li>
+<li><a data-i18n="hero.cat.studio" href="garden-studio.html">Garden Studio</a></li>
+<li><a data-i18n="hero.cat.look" href="#atelier">Lookbook</a></li>
+</ul>
+<div class="hero-note">
+<h2 data-i18n="hero.season">Autumn 2026</h2>
+<p class="hero-blurb" data-i18n="hero.blurb"><a href="#collection">“The Quiet Edit”</a> borrows Monet’s late light and a Milan ease—soft tees and light knits cut for unhurried days, in cream, lilac, and sage.</p>
 </div>
 </div>
 </section>
@@ -1079,22 +1213,182 @@
     const bar = document.getElementById("topbar");
     const toggle = document.getElementById("menu-toggle");
     const mobile = document.getElementById("mobile-nav");
-    addEventListener("scroll", () => bar.classList.toggle("scrolled", scrollY > 8), { passive: true });
+    const nav = document.querySelector(".nav-links");
+    const pill = nav ? nav.querySelector(".nav-pill") : null;
+    let menuOverflow = "";
+    let currentLink = null;
+
+    addEventListener("scroll", () => {
+      bar.classList.toggle("scrolled", scrollY > 8);
+      updateSpy();
+    }, { passive: true });
+
+    function langNow() {
+      return (window.NoYI18n && (localStorage.getItem("noy-lang") || window.NoYI18n.detect())) || "en";
+    }
     function syncMenuLabel() {
       const open = mobile.classList.contains("open");
-      const lang = (window.NoYI18n && (localStorage.getItem("noy-lang") || window.NoYI18n.detect())) || "en";
+      const lang = langNow();
       const key = open ? "nav.menuClose" : "nav.menuOpen";
       toggle.setAttribute("aria-label", window.NoYI18n ? window.NoYI18n.t(lang, key) : (open ? "Close menu" : "Open menu"));
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     }
-    toggle.addEventListener("click", () => {
-      mobile.classList.toggle("open");
+    function setMenuOpen(open) {
+      const was = mobile.classList.contains("open");
+      mobile.classList.toggle("open", open);
+      if (open && !was) {
+        menuOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        closeAllLang(false);
+      } else if (!open && was) {
+        document.body.style.overflow = menuOverflow;
+      }
       syncMenuLabel();
+    }
+    toggle.addEventListener("click", () => setMenuOpen(!mobile.classList.contains("open")));
+    mobile.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenuOpen(false)));
+
+    function closeLang(root, restore) {
+      const menu = root.querySelector(".lang-menu");
+      const trigger = root.querySelector(".lang-trigger");
+      if (!menu || menu.hidden) return;
+      menu.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      root.querySelectorAll("[data-active]").forEach((el) => el.removeAttribute("data-active"));
+      if (restore) trigger.focus();
+    }
+    function closeAllLang(restore) {
+      document.querySelectorAll(".lang-switch").forEach((root) => closeLang(root, restore));
+    }
+    document.querySelectorAll(".lang-switch").forEach((root) => {
+      const trigger = root.querySelector(".lang-trigger");
+      const menu = root.querySelector(".lang-menu");
+      const options = [...menu.querySelectorAll("[role='option']")];
+      function highlighted() {
+        const marked = options.findIndex((o) => o.getAttribute("data-active") === "true");
+        if (marked >= 0) return marked;
+        const current = options.findIndex((o) => o.classList.contains("is-active"));
+        return current >= 0 ? current : 0;
+      }
+      function highlight(i) {
+        options.forEach((o, idx) => {
+          if (idx === i) o.setAttribute("data-active", "true");
+          else o.removeAttribute("data-active");
+        });
+        options[i].focus({ preventScroll: true });
+      }
+      function open(fromEnd) {
+        closeAllLang(false);
+        menu.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
+        const current = options.findIndex((o) => o.classList.contains("is-active"));
+        highlight(fromEnd ? options.length - 1 : (current >= 0 ? current : 0));
+      }
+      trigger.addEventListener("click", () => {
+        if (menu.hidden) open(false);
+        else closeLang(root, false);
+      });
+      trigger.addEventListener("keydown", (e) => {
+        if (menu.hidden && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+          e.preventDefault();
+          open(e.key === "ArrowUp");
+        }
+      });
+      menu.addEventListener("keydown", (e) => {
+        const i = highlighted();
+        if (e.key === "ArrowDown") { e.preventDefault(); highlight((i + 1) % options.length); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); highlight((i - 1 + options.length) % options.length); }
+        else if (e.key === "Home") { e.preventDefault(); highlight(0); }
+        else if (e.key === "End") { e.preventDefault(); highlight(options.length - 1); }
+        else if (e.key === "Tab") closeLang(root, false);
+      });
+      options.forEach((opt, i) => {
+        opt.addEventListener("mouseenter", () => {
+          options.forEach((o, idx) => {
+            if (idx === i) o.setAttribute("data-active", "true");
+            else o.removeAttribute("data-active");
+          });
+        });
+        opt.addEventListener("click", () => closeLang(root, true));
+      });
     });
-    mobile.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
-      mobile.classList.remove("open");
+    document.addEventListener("mousedown", (e) => {
+      document.querySelectorAll(".lang-switch").forEach((root) => {
+        if (!root.contains(e.target)) closeLang(root, false);
+      });
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const openMenu = [...document.querySelectorAll(".lang-menu")].find((m) => !m.hidden);
+      if (openMenu) {
+        e.preventDefault();
+        closeLang(openMenu.closest(".lang-switch"), true);
+        return;
+      }
+      if (mobile.classList.contains("open")) {
+        e.preventDefault();
+        setMenuOpen(false);
+        toggle.focus();
+      }
+    });
+
+    function movePill(el) {
+      if (!pill || !nav) return;
+      if (!el || getComputedStyle(nav).display === "none") {
+        pill.style.opacity = "0";
+        return;
+      }
+      const nr = nav.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      pill.style.width = r.width + "px";
+      pill.style.height = r.height + "px";
+      pill.style.transform = "translate(" + (r.left - nr.left) + "px, " + (r.top - nr.top) + "px)";
+      pill.style.opacity = "1";
+    }
+    const spyLinks = nav ? [...nav.querySelectorAll("a[href^='#']")] : [];
+    function updateSpy() {
+      if (!nav || getComputedStyle(nav).display === "none") return;
+      const line = scrollY + 160;
+      let active = null;
+      spyLinks.forEach((a) => {
+        const el = document.querySelector(a.getAttribute("href"));
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + scrollY;
+        if (top <= line) active = a;
+      });
+      spyLinks.forEach((a) => {
+        if (a === active) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+      currentLink = active;
+      if (!nav.matches(":hover") && !nav.contains(document.activeElement)) movePill(active);
+    }
+    if (nav) {
+      nav.addEventListener("mouseover", (e) => {
+        const a = e.target.closest("a");
+        if (a && nav.contains(a)) movePill(a);
+      });
+      nav.addEventListener("mouseleave", () => movePill(currentLink));
+      nav.addEventListener("focusin", (e) => {
+        const a = e.target.closest("a");
+        if (a) movePill(a);
+      });
+      nav.addEventListener("focusout", () => movePill(currentLink));
+      addEventListener("resize", () => movePill(nav.matches(":hover") ? nav.querySelector("a:hover") : currentLink));
+    }
+
+    function syncLangChrome(lang) {
+      const name = lang === "zh" ? "中文" : "English";
+      const prefix = lang === "zh" ? "当前语言：" : "Current language: ";
+      document.querySelectorAll(".lang-trigger").forEach((btn) => {
+        btn.setAttribute("aria-label", prefix + name);
+      });
+      document.querySelectorAll(".lang-menu [data-lang]").forEach((btn) => {
+        btn.setAttribute("aria-selected", btn.getAttribute("data-lang") === lang ? "true" : "false");
+      });
       syncMenuLabel();
-    }));
+    }
+
     const reveals = document.querySelectorAll(".reveal");
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {
@@ -1103,12 +1397,13 @@
       reveals.forEach((el) => io.observe(el));
     } else { reveals.forEach((el) => el.classList.add("in")); }
 
-    // i18n boot
     if (window.NoYI18n) {
       window.NoYI18n.bindSwitcher();
       window.NoYI18n.apply(window.NoYI18n.detect());
-      document.addEventListener("noy:lang", syncMenuLabel);
+      document.addEventListener("noy:lang", (e) => syncLangChrome(e.detail.lang));
+      syncLangChrome(window.NoYI18n.detect());
     }
+    updateSpy();
 </script>
 </body>
 </html>
