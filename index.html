@@ -9,6 +9,22 @@
 <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="NoY — soft tees and light knits for unhurried days. A Monet-garden mood for everyday wear." name="description"/>
 <meta content="#f4eee6" name="theme-color"/>
+<link rel="canonical" href="https://noywear.com/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="NoY"/>
+<meta property="og:title" content="NoY — Softwear in a Quiet Garden"/>
+<meta property="og:description" content="Women’s soft tees and light knits in small runs — pieces with garden ease. Come in. Stay a while."/>
+<meta property="og:url" content="https://noywear.com/"/>
+<meta property="og:image" content="https://noywear.com/assets/hero.jpg"/>
+<meta property="og:image:width" content="864"/>
+<meta property="og:image:height" content="1152"/>
+<meta property="og:image:alt" content="Lilac blossoms in soft garden light"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:locale:alternate" content="zh_CN"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="NoY — Softwear in a Quiet Garden"/>
+<meta name="twitter:description" content="Women’s soft tees and light knits in small runs. Come in. Stay a while."/>
+<meta name="twitter:image" content="https://noywear.com/assets/hero.jpg"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
@@ -700,6 +716,41 @@
       .studio-invite { padding: 8px 20px 40px; }
       .studio-card { grid-template-columns: 1fr; padding: 28px 22px 26px; gap: 22px; }
     }
+
+    /* ============ Garden interactions ============ */
+    /* custom cursor */
+    #cursor-dot,#cursor-ring{position:fixed;top:0;left:0;z-index:90;pointer-events:none;border-radius:50%;display:none}
+    #cursor-dot{width:6px;height:6px;background:var(--accent);transform:translate(-50%,-50%)}
+    #cursor-ring{width:30px;height:30px;border:1px solid rgba(154,127,166,.5);transform:translate(-50%,-50%);transition:width .25s ease,height .25s ease,border-color .25s ease}
+    #cursor-ring.big{width:52px;height:52px;border-color:rgba(154,127,166,.85)}
+    @media (pointer:fine){#cursor-dot,#cursor-ring{display:block}}
+    /* soft light following the pointer */
+    #cursor-light{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55;
+      background:radial-gradient(540px circle at var(--lx,50%) var(--ly,40%),rgba(255,243,219,.3),transparent 65%)}
+    /* hero parallax: independent translate composes with existing animations */
+    .hero-stage{--px:0;--py:0}
+    .hero-stage .frame.main{translate:calc(var(--px)*10px) calc(var(--py)*6px)}
+    .hero-stage .frame.float-b{translate:calc(var(--px)*-14px) calc(var(--py)*-9px)}
+    .hero-stage .frame.float-a{translate:calc(var(--px)*16px) calc(var(--py)*10px)}
+    .hero-wash{translate:calc(var(--px)*-8px) calc(var(--py)*-5px)}
+    /* petals lean with the pointer */
+    .garden-sky{--mx:0}
+    .garden-sky .petal{translate:calc(var(--mx)*22px) 0}
+    /* word-stagger title */
+    #hero-title.w-split .word{display:inline-block;overflow:hidden;vertical-align:bottom}
+    #hero-title.w-split .word>i{display:inline-block;font-style:inherit;transform:translateY(112%);
+      transition:transform .9s cubic-bezier(.2,.65,.2,1) calc(.4s + var(--i)*70ms)}
+    #hero-title.w-split.run .word>i{transform:translateY(0)}
+    /* tilt targets */
+    a.tile-link{transition:transform .3s ease}
+    .look{transition:border-color .3s,box-shadow .3s,transform .3s ease}
+    .tilt-in{transform:perspective(760px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-4px)}
+    @media (prefers-reduced-motion:reduce){
+      #cursor-dot,#cursor-ring{display:none!important}
+      #cursor-light{display:none}
+      #hero-title.w-split .word>i{transform:none;transition:none}
+      .hero-stage .frame.main,.hero-stage .frame.float-b,.hero-stage .frame.float-a,.hero-wash,.garden-sky .petal{translate:none}
+    }
 </style>
 <script src="assets/i18n.js"></script></head>
 <body>
@@ -708,6 +759,9 @@
 <div aria-hidden="true" class="garden-sky">
 <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span>
 </div>
+<div aria-hidden="true" id="cursor-light"></div>
+<div aria-hidden="true" id="cursor-dot"></div>
+<div aria-hidden="true" id="cursor-ring"></div>
 <header class="topbar" id="topbar">
 <div class="topbar-inner">
 <nav aria-label="Primary" class="nav-left" data-i18n-aria="nav.primary">
@@ -757,8 +811,7 @@
 <h1 data-i18n="hero.title" data-i18n-html="hero.title" id="hero-title">Come in.<br/><em>Stay a while.</em></h1>
 <p class="hero-verse" data-i18n="hero.verse">Cloth as quiet as late light through leaves.</p>
 <p class="hero-lead" data-i18n="hero.lead">
-          NoY makes soft tees and light knits for days that refuse to hurry—
-          pieces that feel like walking into a garden: airy, a little painterly, entirely yours.
+          NoY makes women’s soft tees and light knits for days that refuse to hurry—pieces that feel like walking into a garden: airy, a little painterly, entirely yours.
         </p>
 <div class="hero-actions">
 <a class="btn primary" data-i18n="hero.cta" href="#atelier">Step into the atelier</a>
@@ -1109,6 +1162,63 @@
       window.NoYI18n.apply(window.NoYI18n.detect());
       document.addEventListener("noy:lang", syncMenuLabel);
     }
+
+    /* ============ Garden interactions: cursor / parallax / tilt / word reveal ============ */
+    (function () {
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var fine = window.matchMedia("(pointer: fine)").matches;
+
+      function splitTitle() {
+        var h1 = document.getElementById("hero-title");
+        if (!h1) return;
+        var i = 0;
+        h1.innerHTML = h1.innerHTML.replace(/<em>([\s\S]*?)<\/em>|<br\s*\/?>|[^\s<]+/g, function (m) {
+          if (/^<br/i.test(m)) return m;
+          if (/^<em>/i.test(m)) return "<em><span class=\"word\" style=\"--i:" + (i++) + "\"><i>" + m.slice(4, -5) + "</i></span></em>";
+          return "<span class=\"word\" style=\"--i:" + (i++) + "\"><i>" + m + "</i></span>";
+        });
+        h1.classList.add("w-split");
+        requestAnimationFrame(function () { requestAnimationFrame(function () { h1.classList.add("run"); }); });
+      }
+      splitTitle();
+      document.addEventListener("noy:lang", splitTitle);
+
+      if (reduced || !fine) return;
+
+      var dot = document.getElementById("cursor-dot");
+      var ring = document.getElementById("cursor-ring");
+      var light = document.getElementById("cursor-light");
+      var stage = document.querySelector(".hero-stage");
+      var gardenSky = document.querySelector(".garden-sky");
+      var mx = innerWidth / 2, my = innerHeight / 3, cx = mx, cy = my, lx = mx, ly = my;
+      addEventListener("mousemove", function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+      (function loop() {
+        cx += (mx - cx) * .16; cy += (my - cy) * .16;
+        lx += (mx - lx) * .06; ly += (my - ly) * .06;
+        if (dot) dot.style.transform = "translate(" + mx + "px," + my + "px) translate(-50%,-50%)";
+        if (ring) ring.style.transform = "translate(" + cx + "px," + cy + "px) translate(-50%,-50%)";
+        if (light) { light.style.setProperty("--lx", lx + "px"); light.style.setProperty("--ly", ly + "px"); }
+        var nx = mx / innerWidth - .5, ny = my / innerHeight - .5;
+        if (stage) { stage.style.setProperty("--px", nx.toFixed(3)); stage.style.setProperty("--py", ny.toFixed(3)); }
+        if (gardenSky) gardenSky.style.setProperty("--mx", nx.toFixed(3));
+        requestAnimationFrame(loop);
+      })();
+      document.addEventListener("mouseover", function (e) {
+        if (ring) ring.classList.toggle("big", !!e.target.closest("a,button,.tile,.look,.service-card,input,textarea,select"));
+      });
+
+      [].slice.call(document.querySelectorAll("a.tile-link, .look, .service-card")).forEach(function (el) {
+        el.addEventListener("mousemove", function (e) {
+          var r = el.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width - .5;
+          var py = (e.clientY - r.top) / r.height - .5;
+          el.style.setProperty("--rx", (-py * 5).toFixed(2) + "deg");
+          el.style.setProperty("--ry", (px * 7).toFixed(2) + "deg");
+          el.classList.add("tilt-in");
+        });
+        el.addEventListener("mouseleave", function () { el.classList.remove("tilt-in"); });
+      });
+    })();
 </script>
 </body>
 </html>
