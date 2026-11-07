@@ -1701,7 +1701,7 @@
         var zh=lightLang()==='zh';
         var d=new Date();
         var hm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-        el.textContent=(zh?'现在 · ':'Now · ')+(zh?m.pick.zh:m.pick.en)+' · '+(zh?m.pick.tzh:m.pick.ten)+' · '+hm;
+        el.textContent=(zh?'现在 · ':'Now · ')+(zh?m.pick.tzh:m.pick.ten)+' · '+hm;
       }
       function setLight(m,smooth){
         var root=document.documentElement.style;
