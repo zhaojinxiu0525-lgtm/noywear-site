@@ -24,4 +24,4 @@ assets/fresh-cut.jpg          photos/8245684   peony bouquet            Mikhail 
 assets/editorial.jpg          photos/34570288  water lily among leaves  Ayco World
 
 URL pattern: https://www.pexels.com/photo/<id>/
-Questions: zhaojinxiu0525@gmail.com / +86 159 9398 6893
+Questions: zhaojiazhao06@gmail.com / +86 159 9398 6893
